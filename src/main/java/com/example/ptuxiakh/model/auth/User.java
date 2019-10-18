@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,19 +31,23 @@ public class User {
     @NotBlank
     @Size(max = 100)
     private String password;
+
     private Set<Role> roles = new HashSet<>();
 
     @NotBlank
     @Size(min = 4, max = 40)
     private String lastName;
 
-    @Pattern(regexp = "(^$|[0-9]{10})") //10 digits
-    private String phone;
-
     private String role;
 
-    public User() {
+    private String gender;
 
+    private Date dateOfBirth;;
+
+    private Date dateCreated;
+
+
+    public User() {
     }
 
     public User(String name, String username, String email, String password) {
@@ -52,15 +57,27 @@ public class User {
         this.password = password;
     }
 
-    public User(@NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName, @Pattern(regexp = "(^$|[0-9]{10})") String phone, String role) {
+    public User(@NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.lastName = lastName;
-        this.phone = phone;
         this.role = role;
     }
 
+    public User(String id, @NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.lastName = lastName;
+        this.role = role;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.dateCreated = dateCreated;
+    }
 
     public String getId() {
         return id;
@@ -119,12 +136,28 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getRole() {
