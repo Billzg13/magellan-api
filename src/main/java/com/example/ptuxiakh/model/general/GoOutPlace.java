@@ -33,12 +33,14 @@ public class GoOutPlace {
 
     Double finalRating;
 
+    int averageAge;
+
     public GoOutPlace() {
     }
 
     public GoOutPlace(String id, String name, String location, String dateAdded, Double lowPrice,
                       Double highPrice, int population, String description, String category,
-                      ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating) {
+                      ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating, int averageAge) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -51,6 +53,15 @@ public class GoOutPlace {
         this.tags = tags;
         this.allRatings = allRatings;
         this.finalRating = finalRating;
+        this.averageAge = averageAge;
+    }
+
+    public int getAverageAge() {
+        return averageAge;
+    }
+
+    public void setAverageAge(int averageAge) {
+        this.averageAge = averageAge;
     }
 
     public String getId() {

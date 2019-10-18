@@ -46,6 +46,7 @@ public class User {
 
     private Date dateCreated;
 
+    int age;
 
     public User() {
     }
@@ -65,7 +66,7 @@ public class User {
         this.role = role;
     }
 
-    public User(String id, @NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated) {
+    public User(String id, @NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -77,6 +78,15 @@ public class User {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.dateCreated = dateCreated;
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getId() {

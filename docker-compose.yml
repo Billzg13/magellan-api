@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - ~/mongodata:/data/db
+    ports:
+      - 27017:27017
+
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ~/resources/images/:/usr/src/java-app/resources/images/
+      - ~/resources/designs/:/usr/src/java-app/resources/designs/
+    depends_on:
+      - mongo
+  ui:
+    build:
+      context: ../ddp-ui2
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ~/resources/images/:/usr/share/nginx/html/assets/img2/
+    depends_on:
+      - api
+
+  design:
+    build:
+      context: ../dpp_designgen
+      dockerfile: flask_rest_api_v3/Dockerfile.design
+    ports:
+      - 5000:5000
+
+  admin:
+    build:
+      context: ../admin_panel
+      dockerfile: Dockerfile
+    ports:
+      - 4000:80
+    depends_on:
+      - api
