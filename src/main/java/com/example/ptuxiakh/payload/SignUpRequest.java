@@ -27,9 +27,6 @@ public class SignUpRequest {
     @Size(min = 4, max = 40)
     private String lastName;
 
-    @Pattern(regexp="(^$|[0-9]{10})") //10 digits
-    private String phone;
-
     private String role;
 
     public SignUpRequest() {
@@ -37,13 +34,12 @@ public class SignUpRequest {
 
     public SignUpRequest(@NotBlank @Size(min = 4, max = 40) String name, @NotBlank @Size(min = 3, max = 15) String username,
                          @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 6, max = 20) String password,
-                         @NotBlank @Size(min = 4, max = 40) String lastName, String phone, String role) {
+                         @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.lastName = lastName;
-        this.phone = phone;
         this.role = role;
     }
 
@@ -53,14 +49,6 @@ public class SignUpRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getName() {

@@ -3,6 +3,7 @@ package com.example.ptuxiakh.model.general;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GoOutPlace {
 
@@ -14,7 +15,7 @@ public class GoOutPlace {
     //location of the bar
     String location;
 
-    String dateAdded;
+    Date dateAdded;
 
     //lowest price of the place
     Double lowPrice;
@@ -38,7 +39,7 @@ public class GoOutPlace {
     public GoOutPlace() {
     }
 
-    public GoOutPlace(String id, String name, String location, String dateAdded, Double lowPrice,
+    public GoOutPlace(String id, String name, String location, Date dateAdded, Double lowPrice,
                       Double highPrice, int population, String description, String category,
                       ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating, int averageAge) {
         this.id = id;
@@ -88,11 +89,11 @@ public class GoOutPlace {
         this.location = location;
     }
 
-    public String getDateAdded() {
+    public Date getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(String dateAdded) {
+    public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
 
