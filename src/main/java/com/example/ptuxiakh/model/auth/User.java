@@ -1,10 +1,10 @@
 package com.example.ptuxiakh.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,10 +17,10 @@ public class User {
 
     @NotBlank
     @Size(max = 40)
-    private String name;
+    private String firstName;
 
     @NotBlank
-    @Size(max = 15)
+    @Size(max = 40)
     private String username;
 
     @NotBlank
@@ -42,6 +42,7 @@ public class User {
 
     private String gender;
 
+    @JsonProperty("dob")
     private Date dateOfBirth;;
 
     private Date dateCreated;
@@ -51,24 +52,24 @@ public class User {
     public User() {
     }
 
-    public User(String name, String username, String email, String password) {
-        this.name = name;
+    public User(String firstName, String username, String email, String password) {
+        this.firstName = firstName;
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public User(@NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
-        this.name = name;
+    public User(@NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
+        this.firstName = firstName;
         this.username = username;
         this.email = email;
         this.lastName = lastName;
         this.role = role;
     }
 
-    public User(String id, @NotBlank @Size(max = 40) String name, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age) {
+    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -105,12 +106,12 @@ public class User {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getEmail() {
