@@ -69,6 +69,7 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+        signUpRequest.setUsername(signUpRequest.getEmail());
 
         User user = new User(signUpRequest.getFirstName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
                 signUpRequest.getLastName(), signUpRequest.getRole(), signUpRequest.getDateOfBirth(), signUpRequest.getGender());

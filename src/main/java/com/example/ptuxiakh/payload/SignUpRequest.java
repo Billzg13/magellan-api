@@ -12,8 +12,6 @@ public class SignUpRequest {
     @Size(min = 4, max = 40)
     private String firstName;
 
-    @NotBlank
-    @Size(min = 3, max = 15)
     private String username;
 
     @NotBlank
@@ -39,7 +37,7 @@ public class SignUpRequest {
     public SignUpRequest() {
     }
 
-    public SignUpRequest(@NotBlank @Size(min = 4, max = 40) String firstName, @NotBlank @Size(min = 3, max = 15) String username,
+    public SignUpRequest(@NotBlank @Size(min = 4, max = 40) String firstName, String username,
                          @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 6, max = 20) String password,
                          @NotBlank @Size(min = 4, max = 40) String lastName, String role, Date dateOfBirth, String gender) {
         this.firstName = firstName;
