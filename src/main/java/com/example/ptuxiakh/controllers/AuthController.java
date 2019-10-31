@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -69,8 +70,8 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-                signUpRequest.getLastName(), signUpRequest.getRole());
+        User user = new User(signUpRequest.getFirstName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
+                signUpRequest.getLastName(), signUpRequest.getRole(), signUpRequest.getDateOfBirth(), signUpRequest.getGender());
 
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
@@ -78,7 +79,7 @@ public class AuthController {
                 .orElseThrow(() -> new RuntimeException("User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
-
+        user.setDateCreated(new Date());
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder

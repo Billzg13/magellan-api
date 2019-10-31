@@ -59,12 +59,16 @@ public class User {
         this.password = password;
     }
 
-    public User(@NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
+    public User(@NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username,
+                @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName,
+                String role, Date dateOfBirth, String gender) {
         this.firstName = firstName;
         this.username = username;
         this.email = email;
         this.lastName = lastName;
         this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
     }
 
     public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age) {

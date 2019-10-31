@@ -1,14 +1,16 @@
 package com.example.ptuxiakh.payload;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 public class SignUpRequest {
     @NotBlank
     @Size(min = 4, max = 40)
-    private String name;
+    private String firstName;
 
     @NotBlank
     @Size(min = 3, max = 15)
@@ -29,18 +31,41 @@ public class SignUpRequest {
 
     private String role;
 
+    @JsonProperty("dob")
+    private Date dateOfBirth;
+
+    private String gender;
+
     public SignUpRequest() {
     }
 
-    public SignUpRequest(@NotBlank @Size(min = 4, max = 40) String name, @NotBlank @Size(min = 3, max = 15) String username,
+    public SignUpRequest(@NotBlank @Size(min = 4, max = 40) String firstName, @NotBlank @Size(min = 3, max = 15) String username,
                          @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 6, max = 20) String password,
-                         @NotBlank @Size(min = 4, max = 40) String lastName, String role) {
-        this.name = name;
+                         @NotBlank @Size(min = 4, max = 40) String lastName, String role, Date dateOfBirth, String gender) {
+        this.firstName = firstName;
         this.username = username;
         this.email = email;
         this.password = password;
         this.lastName = lastName;
         this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getLastName() {
@@ -51,12 +76,12 @@ public class SignUpRequest {
         this.lastName = lastName;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getUsername() {
