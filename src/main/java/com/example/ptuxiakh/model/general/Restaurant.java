@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class GoOutPlace {
+public class Restaurant {
 
     @Id
     String id;
@@ -36,10 +36,10 @@ public class GoOutPlace {
 
     int averageAge;
 
-    public GoOutPlace() {
+    public Restaurant() {
     }
 
-    public GoOutPlace(String id, String name, String location, Date dateAdded, Double lowPrice,
+    public Restaurant(String id, String name, String location, Date dateAdded, Double lowPrice,
                       Double highPrice, int population, String description, String category,
                       ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating, int averageAge) {
         this.id = id;

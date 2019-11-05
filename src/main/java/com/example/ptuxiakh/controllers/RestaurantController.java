@@ -1,7 +1,7 @@
 package com.example.ptuxiakh.controllers;
 
-import com.example.ptuxiakh.model.general.GoOutPlace;
-import com.example.ptuxiakh.services.GoOutPlaceService;
+import com.example.ptuxiakh.model.general.Restaurant;
+import com.example.ptuxiakh.services.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +13,18 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/places")
-public class GoOutPlaceController {
+public class RestaurantController {
 
-    Logger logger = LoggerFactory.getLogger(GoOutPlaceController.class);
+    Logger logger = LoggerFactory.getLogger(RestaurantController.class);
 
     @Autowired
-    GoOutPlaceService goOutPlaceService;
+    RestaurantService restaurantService;
 
     @GetMapping("/all")
     public ResponseEntity getAllPlaces(){
         logger.debug("In Action getAllPlaces");
         try{
-            return new ResponseEntity(goOutPlaceService.getAllPlaces(), HttpStatus.OK);
+            return new ResponseEntity(restaurantService.getAllPlaces(), HttpStatus.OK);
         }catch (Exception exc){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -36,7 +36,7 @@ public class GoOutPlaceController {
 
         try{
             if (placeId != null)
-                return new ResponseEntity(goOutPlaceService.getSinglePlace(placeId), HttpStatus.OK);
+                return new ResponseEntity(restaurantService.getSinglePlace(placeId), HttpStatus.OK);
         }catch (Exception exc){
             exc.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class GoOutPlaceController {
 
         try {
            if (placeId != null) {
-                goOutPlaceService.deletePlace(placeId);
+                restaurantService.deletePlace(placeId);
            }
        }catch (Exception exc){
            exc.printStackTrace();
@@ -58,12 +58,12 @@ public class GoOutPlaceController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity createNewPlace(@RequestBody GoOutPlace goOutPlace){
+    public ResponseEntity createNewPlace(@RequestBody Restaurant restaurant){
         logger.debug("In Action createNewPlace");
 
         try{
-            if (goOutPlace != null) {
-                GoOutPlace result = goOutPlaceService.createNewPlace(goOutPlace);
+            if (restaurant != null) {
+                Restaurant result = restaurantService.createNewPlace(restaurant);
                 return new ResponseEntity(result, HttpStatus.OK);
             }
         }catch (Exception exc){
@@ -73,12 +73,12 @@ public class GoOutPlaceController {
     }
 
     @PutMapping("/update/{placeId}")
-    public ResponseEntity updatePlace(@NotNull @PathVariable String placeId, @RequestBody GoOutPlace goOutPlace){
+    public ResponseEntity updatePlace(@NotNull @PathVariable String placeId, @RequestBody Restaurant restaurant){
         logger.debug("In Action updatePlace with id: "+placeId);
 
         try{
-            if (placeId != null && goOutPlace != null) {
-                GoOutPlace result = goOutPlaceService.updatePlace(placeId, goOutPlace);
+            if (placeId != null && restaurant != null) {
+                Restaurant result = restaurantService.updatePlace(placeId, restaurant);
                 if (result != null)
                     return new ResponseEntity(result, HttpStatus.OK);
             }

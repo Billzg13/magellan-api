@@ -26,6 +26,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Date;
 
+/**
+ * This controller is used for auth purposes
+ *
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -90,14 +94,7 @@ public class AuthController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 
-    @GetMapping("all/users")
-    public ResponseEntity getAllUsers(){
-        try{
-            return new ResponseEntity(userRepository.findAll(), HttpStatus.OK);
-        }catch (Exception exc){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity deleteUser(@PathVariable String userId){
