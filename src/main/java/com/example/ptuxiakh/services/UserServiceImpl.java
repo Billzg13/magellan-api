@@ -1,6 +1,7 @@
 package com.example.ptuxiakh.services;
 
 import com.example.ptuxiakh.model.auth.User;
+import com.example.ptuxiakh.model.general.UserViewModel;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,35 @@ public class UserServiceImpl implements UserService{
             throw new NullPointerException("updateUser cannot be null");
 
         User result = userRepository.save(updateUser);
+        return result;
+    }
+
+    /**
+     *  use this function to update User without password...
+     * @param userId
+     * @param updateUser
+     * @return
+     */
+    @Override
+    public User updateUserNoAuth(String userId, UserViewModel updateUser) {
+        if (userId == null)
+            throw new NullPointerException("user id is null");
+
+        if (updateUser == null)
+            throw new NullPointerException("update user data empty");
+
+        User result = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("cant find user"));
+
+        if (updateUser.getFavourites() != null)
+            result.setFavourites(result.getFavourites());
+        if (updateUser.getAge() != 0)
+            result.setAge(updateUser.getAge());
+        if (updateUser.getEmail() != null)
+            result.setEmail(updateUser.getEmail());
+        if (updateUser.getGender() != null)
+            result.setGender(result.getGender());
+
+        userRepository.save(result);
         return result;
     }
 }

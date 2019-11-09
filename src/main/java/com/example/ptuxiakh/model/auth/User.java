@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +50,8 @@ public class User {
 
     int age;
 
+    ArrayList<String> favourites;
+
     public User() {
     }
 
@@ -71,7 +74,7 @@ public class User {
         this.gender = gender;
     }
 
-    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age) {
+    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<String> favourites) {
         this.id = id;
         this.firstName = firstName;
         this.username = username;
@@ -84,6 +87,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.dateCreated = dateCreated;
         this.age = age;
+        this.favourites = favourites;
     }
 
     public int getAge() {
@@ -181,6 +185,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public ArrayList<String> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(ArrayList<String> favourites) {
+        this.favourites = favourites;
     }
 }
 
