@@ -5,6 +5,7 @@ import com.example.ptuxiakh.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -53,8 +54,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant createNewPlace(Restaurant restaurant) {
         try{
-            if (restaurant != null)
-                return restaurantRepository.save(restaurant);
+            if (restaurant == null)
+                return null;
+
+            System.out.println("this is the high price: "+restaurant.getHighPrice());
+            restaurant.setDateAdded(new Date());
+            return restaurantRepository.save(restaurant);
         }catch (Exception exc){
             exc.printStackTrace();
         }

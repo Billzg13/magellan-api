@@ -71,15 +71,14 @@ public class UserServiceImpl implements UserService{
         User result = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("cant find user"));
 
         if (updateUser.getFavourites() != null)
-            result.setFavourites(result.getFavourites());
+            result.setFavourites(updateUser.getFavourites());
         if (updateUser.getAge() != 0)
             result.setAge(updateUser.getAge());
         if (updateUser.getEmail() != null)
             result.setEmail(updateUser.getEmail());
         if (updateUser.getGender() != null)
             result.setGender(result.getGender());
-
-        userRepository.save(result);
-        return result;
+        System.out.println("this is the user:  "+result.toString());
+        return userRepository.save(result);
     }
 }

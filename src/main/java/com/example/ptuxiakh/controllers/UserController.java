@@ -55,6 +55,7 @@ public class UserController {
                 return new ResponseEntity(new ErrorResponse("no update data is provided"), HttpStatus.BAD_REQUEST);
 
             User result = userService.updateUserNoAuth(userId, updateUser);
+
             if (result != null)
                 return new ResponseEntity(result, HttpStatus.OK);
 

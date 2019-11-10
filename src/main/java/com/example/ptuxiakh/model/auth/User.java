@@ -194,5 +194,24 @@ public class User {
     public void setFavourites(ArrayList<String> favourites) {
         this.favourites = favourites;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", lastName='" + lastName + '\'' +
+                ", role='" + role + '\'' +
+                ", gender='" + gender + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", dateCreated=" + dateCreated +
+                ", age=" + age +
+                ", favourites=" + favourites +
+                '}';
+    }
 }
 
