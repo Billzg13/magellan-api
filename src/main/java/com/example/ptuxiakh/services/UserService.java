@@ -1,7 +1,7 @@
 package com.example.ptuxiakh.services;
 
 import com.example.ptuxiakh.model.auth.User;
-import com.example.ptuxiakh.model.general.UserViewModel;
+import com.example.ptuxiakh.model.viewModels.UserViewModel;
 
 import java.util.List;
 

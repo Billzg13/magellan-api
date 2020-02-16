@@ -1,4 +1,4 @@
-package com.example.ptuxiakh.model;
+package com.example.ptuxiakh.model.errors;
 
 public class ErrorResponse {
     private String error;

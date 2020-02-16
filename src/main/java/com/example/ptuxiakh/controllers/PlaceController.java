@@ -1,6 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
-import com.example.ptuxiakh.model.general.Restaurant;
+import com.example.ptuxiakh.model.Place;
 import com.example.ptuxiakh.services.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,9 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/places")
-public class RestaurantController {
+public class PlaceController {
 
-    Logger logger = LoggerFactory.getLogger(RestaurantController.class);
+    Logger logger = LoggerFactory.getLogger(PlaceController.class);
 
     @Autowired
     RestaurantService restaurantService;
@@ -58,12 +58,12 @@ public class RestaurantController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity createNewPlace(@RequestBody Restaurant restaurant){
+    public ResponseEntity createNewPlace(@RequestBody Place place){
         logger.debug("In Action createNewPlace");
 
         try{
-            if (restaurant != null) {
-                Restaurant result = restaurantService.createNewPlace(restaurant);
+            if (place != null) {
+                Place result = restaurantService.createNewPlace(place);
                 return new ResponseEntity(result, HttpStatus.OK);
             }
         }catch (Exception exc){
@@ -73,12 +73,12 @@ public class RestaurantController {
     }
 
     @PutMapping("/update/{placeId}")
-    public ResponseEntity updatePlace(@NotNull @PathVariable String placeId, @RequestBody Restaurant restaurant){
+    public ResponseEntity updatePlace(@NotNull @PathVariable String placeId, @RequestBody Place place){
         logger.debug("In Action updatePlace with id: "+placeId);
 
         try{
-            if (placeId != null && restaurant != null) {
-                Restaurant result = restaurantService.updatePlace(placeId, restaurant);
+            if (placeId != null && place != null) {
+                Place result = restaurantService.updatePlace(placeId, place);
                 if (result != null)
                     return new ResponseEntity(result, HttpStatus.OK);
             }

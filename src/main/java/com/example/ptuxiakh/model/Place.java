@@ -1,11 +1,11 @@
-package com.example.ptuxiakh.model.general;
+package com.example.ptuxiakh.model;
 
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Restaurant {
+public class Place {
 
     @Id
     String id;
@@ -36,12 +36,12 @@ public class Restaurant {
 
     int averageAge;
 
-    public Restaurant() {
+    public Place() {
     }
 
-    public Restaurant(String id, String name, String location, Date dateAdded, Double lowPrice,
-                      Double highPrice, int population, String description, String category,
-                      ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating, int averageAge) {
+    public Place(String id, String name, String location, Date dateAdded, Double lowPrice,
+                 Double highPrice, int population, String description, String category,
+                 ArrayList<String> tags, ArrayList<Integer> allRatings, Double finalRating, int averageAge) {
         this.id = id;
         this.name = name;
         this.location = location;

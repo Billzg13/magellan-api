@@ -1,9 +1,9 @@
 package com.example.ptuxiakh.repository;
 
-import com.example.ptuxiakh.model.general.Restaurant;
+import com.example.ptuxiakh.model.Place;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RestaurantRepository extends MongoRepository<Restaurant, String> {
+public interface PlaceRepository extends MongoRepository<Place, String> {
 }

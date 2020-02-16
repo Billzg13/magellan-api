@@ -1,10 +1,9 @@
 package com.example.ptuxiakh.controllers;
 
 
-import com.example.ptuxiakh.model.ErrorResponse;
+import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.model.auth.User;
-import com.example.ptuxiakh.model.general.UserViewModel;
-import com.example.ptuxiakh.repository.UserRepository;
+import com.example.ptuxiakh.model.viewModels.UserViewModel;
 import com.example.ptuxiakh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
