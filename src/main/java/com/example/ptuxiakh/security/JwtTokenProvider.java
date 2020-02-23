@@ -59,13 +59,12 @@ public class JwtTokenProvider {
         //return UUID.fromString(claims.getSubject());
     }
 
-    public String getCustomerIdFromJWT(String token){
+    public String extractUserIdFromJwt(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        return claims.get("cid",String.class);
+        return claims.get("userId", String.class);
     }
 
     public boolean validateToken(String authToken) {
