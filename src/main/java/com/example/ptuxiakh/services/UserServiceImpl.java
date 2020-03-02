@@ -6,6 +6,7 @@ import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,5 +81,14 @@ public class UserServiceImpl implements UserService{
             result.setGender(result.getGender());
         System.out.println("this is the user:  "+result.toString());
         return userRepository.save(result);
+    }
+
+    @Override
+    public User updateFavouritesUser(String userId, ArrayList<String> favourites) {
+        if (userId == null || favourites.isEmpty() || favourites == null)
+            throw new NullPointerException("favourites or user is not present");
+        User user = userRepository.findById(userId).orElseThrow( ()-> new NullPointerException("User not found"));
+
+        return null;
     }
 }

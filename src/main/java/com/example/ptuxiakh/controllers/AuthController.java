@@ -23,8 +23,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * This controller is used for auth purposes
@@ -76,7 +78,7 @@ public class AuthController {
         signUpRequest.setUsername(signUpRequest.getEmail());
 
         User user = new User(signUpRequest.getFirstName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-                signUpRequest.getLastName(), signUpRequest.getRole(), signUpRequest.getDateOfBirth(), signUpRequest.getGender());
+                signUpRequest.getLastName(), "user", signUpRequest.getDateOfBirth(), signUpRequest.getGender());
 
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
@@ -85,6 +87,13 @@ public class AuthController {
 
         user.setRoles(Collections.singleton(userRole));
         user.setDateCreated(new Date());
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(signUpRequest.getDateOfBirth());
+        int year = calendar.get(Calendar.YEAR);
+        calendar.setTime(new Date());
+        int currentYear = calendar.get(Calendar.YEAR);
+        user.setAge(currentYear - year);
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
