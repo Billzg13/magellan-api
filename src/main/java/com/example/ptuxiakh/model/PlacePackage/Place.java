@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 
-@Document
+@Document(collection = "places")
 public class Place {
     @Id
     String id;
@@ -31,6 +31,9 @@ public class Place {
 
     ArrayList<String> types;
 
+    @JsonProperty("price_level")
+    int priceLevel;
+
     @JsonProperty("user_ratings_total")
     long userRatingsTotal;
 
@@ -39,7 +42,7 @@ public class Place {
     public Place() {
     }
 
-    public Place(String id, Geometry geometry, String icon, String name, OpeningHours openingHours, String placeId, Double rating, String reference, String scope, ArrayList<String> types, long userRatingsTotal, String vicinity) {
+    public Place(String id, Geometry geometry, String icon, String name, OpeningHours openingHours, String placeId, Double rating, String reference, String scope, ArrayList<String> types, long userRatingsTotal, String vicinity, int priceLevel) {
         this.id = id;
         this.geometry = geometry;
         this.icon = icon;
@@ -52,6 +55,7 @@ public class Place {
         this.types = types;
         this.userRatingsTotal = userRatingsTotal;
         this.vicinity = vicinity;
+        this.priceLevel = priceLevel;
     }
 
     public String getId() {
@@ -148,6 +152,14 @@ public class Place {
 
     public void setVicinity(String vicinity) {
         this.vicinity = vicinity;
+    }
+
+    public int getPriceLevel() {
+        return priceLevel;
+    }
+
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
     }
 
     @Override

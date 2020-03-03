@@ -20,8 +20,13 @@ public class PlaceController {
 
     @GetMapping("/all")
     public ResponseEntity getAllPlaces(@RequestParam(required = false) String type){
+        List<Place> places;
+        if (type == null){
+            places = placeRepository.findAll();
+        }else{
+            places = placeRepository.findAllByTypes(type);
+        }
 
-        List<Place> places = placeRepository.findAll();
         return ResponseEntity.ok(places.stream().map( place -> {
             PlaceProjection placeProjection = new PlaceProjection(place);
             return placeProjection;

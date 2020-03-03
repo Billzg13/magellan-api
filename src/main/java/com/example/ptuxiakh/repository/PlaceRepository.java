@@ -12,4 +12,6 @@ public interface PlaceRepository extends MongoRepository<Place, String> {
     @Override
     @Query(value="{ }", fields="{ 'name' : 1, 'rating' : 1}")
     List<Place> findAll();
+
+    List<Place> findAllByTypes(String type);
 }

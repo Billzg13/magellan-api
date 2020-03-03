@@ -6,7 +6,7 @@ import java.util.List;
 public class PlacesResponse {
 
     List<Object> html_attributions;
-    String next_page_token;
+    public String next_page_token;
     ArrayList<Place> results;
     String status;
 
