@@ -1,7 +1,7 @@
 package com.example.ptuxiakh.repository;
 
-import com.example.ptuxiakh.model.QuickSearch;
+import com.example.ptuxiakh.model.SearchRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface QuickSearchRepository extends MongoRepository<QuickSearch, String> {
+public interface QuickSearchRepository extends MongoRepository<SearchRequest, String> {
 }

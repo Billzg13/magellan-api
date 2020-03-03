@@ -1,5 +1,9 @@
 package com.example.ptuxiakh.model.PlacePackage;
 
+
+/**
+ * Projection of Place model
+ */
 public class PlaceProjection {
     String name;
     Double rating;

@@ -1,7 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
 import com.example.ptuxiakh.model.AdvancedSearch;
-import com.example.ptuxiakh.model.QuickSearch;
 import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.SearchService;
 import org.slf4j.Logger;
@@ -27,13 +26,11 @@ public class SearchController {
     JwtTokenProvider tokenProvider;
 
     @PostMapping("/quick")
-    public ResponseEntity quickSearch(HttpServletRequest request, QuickSearch quickSearch) {
+    public ResponseEntity quickSearch(HttpServletRequest request) {
         try {
-            if (quickSearch == null)
-                return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            Object result = searchService.quickSearh(userId, quickSearch);
+            Object result = searchService.quickSearh(userId);
             return ResponseEntity.ok(result);
 
         } catch (Exception exc) {
