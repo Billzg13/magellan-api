@@ -1,14 +1,18 @@
 package com.example.ptuxiakh.controllers;
 
 
+import com.example.ptuxiakh.model.FirstTimeLogin;
 import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.model.viewModels.UserViewModel;
+import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -20,6 +24,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    JwtTokenProvider tokenProvider;
+
     @GetMapping("/all")
     public ResponseEntity getAllUsers(){
         try{
@@ -28,6 +35,19 @@ public class UserController {
             exc.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/first")
+    public ResponseEntity getFirstTime(HttpServletRequest request){
+        String token = request.getHeader("Authorization").substring(7);
+        String userId = tokenProvider.extractUserIdFromJwt(token);
+
+        if (userService.getFirstTimer(userId))
+            return ResponseEntity.ok(new FirstTimeLogin(Boolean.FALSE));
+
+        return ResponseEntity.ok(new FirstTimeLogin(Boolean.TRUE));
+
+
     }
 
     @GetMapping("/single/{userId}")
@@ -65,5 +85,8 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse("something went wrong during update"), HttpStatus.BAD_REQUEST);
         }
     }
+
+    //route to get if user has favourites
+
 
 }

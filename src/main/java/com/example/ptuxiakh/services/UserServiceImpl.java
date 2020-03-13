@@ -15,6 +15,23 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
 
 
+    /**
+     * Returns true in case favourites are not null or empty
+     * @param userId
+     * @return
+     */
+    @Override
+    public Boolean getFirstTimer(String userId) {
+        User user = userRepository.findById(userId).orElseThrow( ()-> new RuntimeException("cant find user"));
+        try{
+            if (user.getFavourites() == null || user.getFavourites().isEmpty())
+                return false;
+        }catch (Exception exc){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public List<User> getAllUsers() {
         try{

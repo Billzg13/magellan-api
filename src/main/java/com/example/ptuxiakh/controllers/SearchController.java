@@ -25,19 +25,36 @@ public class SearchController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    //quickSearch
+    //python -> user -> algorithm -> 5 places
+
+    //SYNCHRONOUS
     @PostMapping("/quick")
     public ResponseEntity quickSearch(HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            Object result = searchService.quickSearh(userId);
-            return ResponseEntity.ok(result);
+            ResponseEntity result = searchService.quickSearh(userId);
+            result.getBody();
+            return ResponseEntity.ok(result.getBody());
 
         } catch (Exception exc) {
             exc.printStackTrace();
             return new ResponseEntity(new Error("something went wrong"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //advanced model:
+    /*
+    int rating
+    int radius
+    Object center{
+        Double latitude
+        Double longtitude
+    }
+    String category
+    int price
+     */
 
     @PostMapping("/advanced")
     public ResponseEntity advancedSearch(HttpServletRequest request, AdvancedSearch advancedSearch){
