@@ -12,7 +12,7 @@ public class SearchRequest {
 
     TypeOfSearch typeOfSearch;
 
-    AdvancedSearch advancedSearch;
+    AdvancedSearchRequest advancedSearchRequest;
 
     public SearchRequest() {
     }
@@ -22,18 +22,18 @@ public class SearchRequest {
         this.typeOfSearch = typeOfSearch;
     }
 
-    public SearchRequest(User user, TypeOfSearch typeOfSearch, AdvancedSearch advancedSearch) {
+    public SearchRequest(User user, TypeOfSearch typeOfSearch, AdvancedSearchRequest advancedSearchRequest) {
         this.user = user;
         this.typeOfSearch = typeOfSearch;
-        this.advancedSearch = advancedSearch;
+        this.advancedSearchRequest = advancedSearchRequest;
     }
 
-    public AdvancedSearch getAdvancedSearch() {
-        return advancedSearch;
+    public AdvancedSearchRequest getAdvancedSearchRequest() {
+        return advancedSearchRequest;
     }
 
-    public void setAdvancedSearch(AdvancedSearch advancedSearch) {
-        this.advancedSearch = advancedSearch;
+    public void setAdvancedSearchRequest(AdvancedSearchRequest advancedSearchRequest) {
+        this.advancedSearchRequest = advancedSearchRequest;
     }
 
     public User getUser() {

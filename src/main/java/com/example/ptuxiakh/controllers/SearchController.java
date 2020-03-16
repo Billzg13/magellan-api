@@ -1,6 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
-import com.example.ptuxiakh.model.AdvancedSearch;
+import com.example.ptuxiakh.model.AdvancedSearchRequest;
 import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.SearchService;
 import org.slf4j.Logger;
@@ -57,13 +57,13 @@ public class SearchController {
      */
 
     @PostMapping("/advanced")
-    public ResponseEntity advancedSearch(HttpServletRequest request, AdvancedSearch advancedSearch){
+    public ResponseEntity advancedSearch(HttpServletRequest request, AdvancedSearchRequest advancedSearchRequest){
         try{
-            if (advancedSearch == null)
+            if (advancedSearchRequest == null)
                 return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            Object result = searchService.advancedSearch(userId, advancedSearch);
+            Object result = searchService.advancedSearch(userId, advancedSearchRequest);
             return ResponseEntity.ok(result);
 
         }catch (Exception exc){

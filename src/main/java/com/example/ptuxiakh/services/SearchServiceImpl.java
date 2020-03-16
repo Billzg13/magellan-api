@@ -1,6 +1,6 @@
 package com.example.ptuxiakh.services;
 
-import com.example.ptuxiakh.model.AdvancedSearch;
+import com.example.ptuxiakh.model.AdvancedSearchRequest;
 import com.example.ptuxiakh.model.SearchRequest;
 import com.example.ptuxiakh.model.TypeOfSearch;
 import com.example.ptuxiakh.model.auth.User;
@@ -8,7 +8,10 @@ import com.example.ptuxiakh.repository.AdvancedSearchRepository;
 import com.example.ptuxiakh.repository.QuickSearchRepository;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,7 +37,7 @@ public class SearchServiceImpl implements SearchService {
     public ResponseEntity<Object> quickSearh(String userId) {
         if (userId == null)
             throw new NullPointerException("userId null");
-        User user = userRepository.findById(userId).orElseThrow(()-> new NullPointerException("cant find user"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("cant find user"));
 
         SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.QUICKSEARCH);
         try {
@@ -46,7 +49,7 @@ public class SearchServiceImpl implements SearchService {
             ResponseEntity<Object> responseEntity = restTemplate.postForEntity(requestUrl, entity, Object.class);
             if (responseEntity.getStatusCode().is2xxSuccessful())
                 return responseEntity;
-        }catch (Exception exc){
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         return null;
@@ -54,17 +57,30 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Object advancedSearch(String userId, AdvancedSearch advancedSearch) {
+    public Object advancedSearch(String userId, AdvancedSearchRequest advancedSearchRequest) {
         if (userId == null)
             throw new NullPointerException("userId null");
-        if (advancedSearch == null)
+        if (advancedSearchRequest == null)
             throw new NullPointerException("quickSearch null");
-        User user = userRepository.findById(userId).orElseThrow(()-> new NullPointerException("cant find user"));
-        SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.ADVANCED_SEARCH, advancedSearch);
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("cant find user"));
+        SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.ADVANCED_SEARCH, advancedSearchRequest);
         //This is the point where we send the search to python Service in order to get the result of the search
         //should this be sync or async?
         //for now we save the search in the database
-        AdvancedSearch result = advancedSearchRepository.save(advancedSearch);
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String requestUrl = "http://localhost:5000/advanced_search";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<SearchRequest> entity = new HttpEntity<>(searchRequest, headers);
+            ResponseEntity<Object> responseEntity = restTemplate.postForEntity(requestUrl, entity, Object.class);
+            if (responseEntity.getStatusCode().is2xxSuccessful())
+                return responseEntity;
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        AdvancedSearchRequest result = advancedSearchRepository.save(advancedSearchRequest);
         if (result != null)
             return result;
         return null;
