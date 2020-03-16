@@ -42,6 +42,7 @@ public class SearchServiceImpl implements SearchService {
         SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.QUICKSEARCH);
         try {
             RestTemplate restTemplate = new RestTemplate();
+            //TODO add config for this url
             String requestUrl = "http://localhost:5000/search";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -70,7 +71,7 @@ public class SearchServiceImpl implements SearchService {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String requestUrl = "http://localhost:5000/advanced_search";
+            String requestUrl = "http://localhost:5000/advanced_search"; //TODO add config for this url
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<SearchRequest> entity = new HttpEntity<>(searchRequest, headers);
