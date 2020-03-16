@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.services;
 
+import com.example.ptuxiakh.model.Favourite;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.model.viewModels.UserViewModel;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -16,4 +17,6 @@ public interface UserService {
     public User updateFavouritesUser(String userId, ArrayList<String> favourites);
 
     Boolean getFirstTimer(String userId);
+
+    ArrayList<Favourite> updateFavouritesForUser(String userId, ArrayList<Favourite> favourites);
 }

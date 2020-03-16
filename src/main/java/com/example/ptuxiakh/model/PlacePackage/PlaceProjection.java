@@ -3,6 +3,8 @@ package com.example.ptuxiakh.model.PlacePackage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+
 /**
  * Projection of Place model
  */
@@ -23,6 +25,8 @@ public class PlaceProjection {
 
     String phone;
 
+    ArrayList<String> types;
+
     //add vicinity,opening hours, price level, <-- these exist in the database
     //fake phone
 
@@ -37,6 +41,7 @@ public class PlaceProjection {
             this.vicinity = place.getVicinity();
             this.openingHours = place.getOpeningHours();
             this.priceLevel = place.getPriceLevel();
+            this.types = place.getTypes();
         }catch (Exception exc){
             exc.printStackTrace();
         }
@@ -103,5 +108,13 @@ public class PlaceProjection {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public ArrayList<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(ArrayList<String> types) {
+        this.types = types;
     }
 }

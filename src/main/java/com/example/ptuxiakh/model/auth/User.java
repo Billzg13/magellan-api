@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.model.auth;
 
+import com.example.ptuxiakh.model.Favourite;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 
@@ -50,7 +51,7 @@ public class User {
 
     int age;
 
-    ArrayList<String> favourites;
+    ArrayList<Favourite> favourites;
 
     public User() {
     }
@@ -74,7 +75,7 @@ public class User {
         this.gender = gender;
     }
 
-    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<String> favourites) {
+    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<Favourite> favourites) {
         this.id = id;
         this.firstName = firstName;
         this.username = username;
@@ -187,11 +188,11 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<String> getFavourites() {
+    public ArrayList<Favourite> getFavourites() {
         return favourites;
     }
 
-    public void setFavourites(ArrayList<String> favourites) {
+    public void setFavourites(ArrayList<Favourite> favourites) {
         this.favourites = favourites;
     }
 

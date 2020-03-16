@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.services;
 
+import com.example.ptuxiakh.model.Favourite;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.model.viewModels.UserViewModel;
 import com.example.ptuxiakh.repository.UserRepository;
@@ -30,6 +31,16 @@ public class UserServiceImpl implements UserService{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ArrayList<Favourite> updateFavouritesForUser(String userId, ArrayList<Favourite> favourites) {
+        if (userId == null)
+            throw new NullPointerException("user is not provided");
+        User user = userRepository.findById(userId).orElseThrow( () -> new NullPointerException("cant find user"));
+        user.setFavourites(favourites);
+        userRepository.save(user);
+        return favourites;
     }
 
     @Override

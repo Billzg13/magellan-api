@@ -1,11 +1,13 @@
 package com.example.ptuxiakh.model.viewModels;
 
+import com.example.ptuxiakh.model.Favourite;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 
 public class UserViewModel {
-    ArrayList<String> favourites;
+    ArrayList<Favourite> favourites;
 
     int age;
 
@@ -16,7 +18,7 @@ public class UserViewModel {
     String email;
 
 
-    public UserViewModel(ArrayList<String> favourites, int age, String gender, @Size(max = 40) @Email String email) {
+    public UserViewModel(ArrayList<Favourite> favourites, int age, String gender, @Size(max = 40) @Email String email) {
         this.favourites = favourites;
         this.age = age;
         this.gender = gender;
@@ -26,11 +28,11 @@ public class UserViewModel {
     public UserViewModel() {
     }
 
-    public ArrayList<String> getFavourites() {
+    public ArrayList<Favourite> getFavourites() {
         return favourites;
     }
 
-    public void setFavourites(ArrayList<String> favourites) {
+    public void setFavourites(ArrayList<Favourite> favourites) {
         this.favourites = favourites;
     }
 
