@@ -35,14 +35,27 @@ public class PlaceProjection {
 
     public PlaceProjection(Place place) {
         try {
+
+            this.types = place.getTypes();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        try {
+            this.openingHours = place.getOpeningHours();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        try {
+            this.vicinity = place.getVicinity();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        try {
             this.rating = place.getRating();
             this.name = place.getName();
             this.id = place.getId();
-            this.vicinity = place.getVicinity();
-            this.openingHours = place.getOpeningHours();
             this.priceLevel = place.getPriceLevel();
-            this.types = place.getTypes();
-        }catch (Exception exc){
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         phone = "210-9058679";
