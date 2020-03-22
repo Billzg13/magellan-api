@@ -34,6 +34,7 @@ public class SearchController {
         try {
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
+
             ResponseEntity result = searchService.quickSearh(userId);
             result.getBody();
             return ResponseEntity.ok(result.getBody());

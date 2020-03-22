@@ -54,7 +54,9 @@ public class UserController {
     }
 
     @GetMapping("/single/{userId}")
-    public ResponseEntity getSingleUser(@PathVariable String userId) {
+    public ResponseEntity getSingleUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        String userId = tokenProvider.extractUserIdFromJwt(token);
         if (userId == null)
             return new ResponseEntity(new ErrorResponse("no user is selected"), HttpStatus.BAD_REQUEST);
         try {

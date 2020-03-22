@@ -3,9 +3,11 @@ package com.example.ptuxiakh.services;
 import com.example.ptuxiakh.model.AdvancedSearchRequest;
 import com.example.ptuxiakh.model.SearchRequest;
 import com.example.ptuxiakh.model.TypeOfSearch;
+import com.example.ptuxiakh.model.UserHistory;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.repository.AdvancedSearchRepository;
 import com.example.ptuxiakh.repository.QuickSearchRepository;
+import com.example.ptuxiakh.repository.UserHistoryRepository;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -14,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -26,6 +30,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserHistoryRepository userHistoryRepository;
 
     /**
      * This is the quick search, the user asks for a quick search of a place
@@ -85,5 +92,23 @@ public class SearchServiceImpl implements SearchService {
         if (result != null)
             return result;
         return null;
+    }
+
+    @Override
+    public void saveSearch(String userId, TypeOfSearch typeOfSearch, AdvancedSearchRequest advancedSearchRequest) {
+        if (typeOfSearch.equals(typeOfSearch.QUICKSEARCH)){
+            UserHistory userHistory = new UserHistory(userId, typeOfSearch);
+            userHistoryRepository.save(userHistory);
+            //save quicksearch here
+        }else{
+            UserHistory userHistory = new UserHistory(userId, typeOfSearch, advancedSearchRequest);
+            userHistoryRepository.save(userHistory);
+            //save advancedSearch here
+        }
+    }
+
+    @Override
+    public List<UserHistory> getUserHistory(String userId) {
+        return userHistoryRepository.findAllById(userId);
     }
 }
