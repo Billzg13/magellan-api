@@ -10,6 +10,8 @@ services:
       - "8000"
     volumes:
       - ~/resources/images/:/usr/src/java-app/resources/images/
+    ports:
+      - 8000:8000
 
 
   web:
