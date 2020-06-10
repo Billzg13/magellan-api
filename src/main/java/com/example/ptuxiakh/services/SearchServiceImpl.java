@@ -10,6 +10,7 @@ import com.example.ptuxiakh.repository.QuickSearchRepository;
 import com.example.ptuxiakh.repository.UserHistoryRepository;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,6 +35,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     UserHistoryRepository userHistoryRepository;
 
+    @Value("${pythonService.url}")
+    private String pythonBaseUrl;
+
     /**
      * This is the quick search, the user asks for a quick search of a place
      *
@@ -49,8 +53,7 @@ public class SearchServiceImpl implements SearchService {
         SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.QUICKSEARCH);
         try {
             RestTemplate restTemplate = new RestTemplate();
-            //TODO add config for this url
-            String requestUrl = "http://localhost:5000/search";
+            String requestUrl = pythonBaseUrl +"/search";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<SearchRequest> entity = new HttpEntity<>(searchRequest, headers);
@@ -78,7 +81,7 @@ public class SearchServiceImpl implements SearchService {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String requestUrl = "http://localhost:5000/advanced_search"; //TODO add config for this url
+            String requestUrl = pythonBaseUrl +"/advanced_search";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<SearchRequest> entity = new HttpEntity<>(searchRequest, headers);
