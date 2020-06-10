@@ -23,6 +23,13 @@ services:
       - 80:80
 
 
+  recommender:
+    build:
+      context: ../python-recommender
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
+
 
 
 
