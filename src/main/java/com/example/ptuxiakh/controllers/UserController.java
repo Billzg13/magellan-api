@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,9 +32,12 @@ public class UserController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    //TODO why do we need this?
     @GetMapping("/all")
     public ResponseEntity getAllUsers() {
         try {
+            List<User> result = userService.getAllUsers();
+            System.out.println(result);
             return new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception exc) {
             exc.printStackTrace();
@@ -40,6 +45,19 @@ public class UserController {
         }
     }
 
+    @GetMapping("/recommender")
+    public ResponseEntity getRecommenderData(){
+        try{
+            return new ResponseEntity(userService.getAllUsersRecommender(), HttpStatus.OK);
+        }catch (Exception exc) {
+            exc.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+
+    //TODO probably dont need this anymore UPDATE we need this but favourites will be removed
     @GetMapping("/first")
     public ResponseEntity getFirstTime(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
@@ -49,10 +67,9 @@ public class UserController {
             return ResponseEntity.ok(new FirstTimeLogin(Boolean.FALSE));
 
         return ResponseEntity.ok(new FirstTimeLogin(Boolean.TRUE));
-
-
     }
 
+    //TODO change route to api/users/me
     @GetMapping("/single/{userId}")
     public ResponseEntity getSingleUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
@@ -110,6 +127,27 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
+    }
+
+    /**
+     * This is the final update User, all other update users will be removed,and their models
+     * The user model must have all the data!, user.id is not required
+     * @param request
+     * @param user
+     * @return
+     */
+    @PutMapping("/update")
+    public ResponseEntity updateUser(HttpServletRequest request, @NotBlank @RequestBody User user){
+        String token = request.getHeader("Authorization").substring(7);
+        String userId = tokenProvider.extractUserIdFromJwt(token);
+        try{
+            if (user == null)
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            User result = userService.updateUserFinal(userId, user);
+            return ResponseEntity.ok(result);
+        }catch (NullPointerException exc){
+            return new ResponseEntity(new ErrorResponse("provide necesary data"), HttpStatus.BAD_REQUEST);
+        }
     }
 
 

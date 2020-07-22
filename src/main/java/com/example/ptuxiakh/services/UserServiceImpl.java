@@ -2,7 +2,9 @@ package com.example.ptuxiakh.services;
 
 import com.example.ptuxiakh.model.Favourite;
 import com.example.ptuxiakh.model.auth.User;
+import com.example.ptuxiakh.model.viewModels.UserRecommenderModel;
 import com.example.ptuxiakh.model.viewModels.UserViewModel;
+import com.example.ptuxiakh.repository.UserRecommenderRepository;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserRecommenderRepository userRecommenderRepository;
 
 
     /**
@@ -25,8 +29,8 @@ public class UserServiceImpl implements UserService{
     public Boolean getFirstTimer(String userId) {
         User user = userRepository.findById(userId).orElseThrow( ()-> new RuntimeException("cant find user"));
         try{
-            if (user.getFavourites() == null || user.getFavourites().isEmpty())
-                return false;
+         //   if (user.getFavourites() == null || user.getFavourites().isEmpty())
+         //       return false;
         }catch (Exception exc){
             return false;
         }
@@ -34,11 +38,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserRecommenderModel> getAllUsersRecommender() {
+        return userRecommenderRepository.findAll();
+    }
+
+    @Override
     public ArrayList<Favourite> updateFavouritesForUser(String userId, ArrayList<Favourite> favourites) {
         if (userId == null)
             throw new NullPointerException("user is not provided");
         User user = userRepository.findById(userId).orElseThrow( () -> new NullPointerException("cant find user"));
-        user.setFavourites(favourites);
+   //     user.setFavourites(favourites);
         userRepository.save(user);
         return favourites;
     }
@@ -100,7 +109,7 @@ public class UserServiceImpl implements UserService{
         User result = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("cant find user"));
 
         if (updateUser.getFavourites() != null)
-            result.setFavourites(updateUser.getFavourites());
+          //  result.setFavourites(updateUser.getFavourites());
         if (updateUser.getAge() != 0)
             result.setAge(updateUser.getAge());
         if (updateUser.getEmail() != null)
@@ -117,6 +126,18 @@ public class UserServiceImpl implements UserService{
             throw new NullPointerException("favourites or user is not present");
         User user = userRepository.findById(userId).orElseThrow( ()-> new NullPointerException("User not found"));
 
+        return null;
+    }
+
+    @Override
+    public User updateUserFinal(String userId, User user) {
+        //The userId cannot be null, the user cannot be null
+        if (userId == null || user == null)
+            throw new NullPointerException("cant update if something is null");
+
+        user.setId(userId);
+        if (userRepository.existsById(userId))
+            return userRepository.save(user);
         return null;
     }
 }
