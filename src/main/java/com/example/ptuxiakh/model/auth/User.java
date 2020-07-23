@@ -1,12 +1,11 @@
 package com.example.ptuxiakh.model.auth;
 
 import com.example.ptuxiakh.model.Favourite;
+import com.example.ptuxiakh.model.Types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -51,7 +50,13 @@ public class User {
 
     int age;
 
-    ArrayList<Favourite> favourites;
+    //ArrayList<Favourite> favourites;
+
+    @Min(0)
+    @Max(5)
+    int priceLevel; // 0 - 5
+
+    Types types;
 
     public User() {
     }
@@ -63,9 +68,10 @@ public class User {
         this.password = password;
     }
 
+    //this is used
     public User(@NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 15) String username,
                 @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 4, max = 40) String lastName,
-                String role, Date dateOfBirth, String gender) {
+                String role, Date dateOfBirth, String gender, int priceLevel, Types types) {
         this.firstName = firstName;
         this.username = username;
         this.email = email;
@@ -73,6 +79,8 @@ public class User {
         this.role = role;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+        this.priceLevel = priceLevel;
+        this.types = types;
     }
 
     public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<Favourite> favourites) {
@@ -88,7 +96,25 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.dateCreated = dateCreated;
         this.age = age;
-        this.favourites = favourites;
+        //this.favourites = favourites;
+    }
+
+    public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<Favourite> favourites, int priceLevel, Types types) {
+        this.id = id;
+        this.firstName = firstName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.lastName = lastName;
+        this.role = role;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.dateCreated = dateCreated;
+        this.age = age;
+        //this.favourites = favourites;
+        this.priceLevel = priceLevel;
+        this.types = types;
     }
 
     public int getAge() {
@@ -188,12 +214,28 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<Favourite> getFavourites() {
-        return favourites;
+    //public ArrayList<Favourite> getFavourites() {
+    //    return favourites;
+    //}
+
+    //public void setFavourites(ArrayList<Favourite> favourites) {
+    //    this.favourites = favourites;
+    //}
+
+    public int getPriceLevel() {
+        return priceLevel;
     }
 
-    public void setFavourites(ArrayList<Favourite> favourites) {
-        this.favourites = favourites;
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
+    }
+
+    public Types getTypes() {
+        return types;
+    }
+
+    public void setTypes(Types types) {
+        this.types = types;
     }
 
     @Override
@@ -211,7 +253,9 @@ public class User {
                 ", dateOfBirth=" + dateOfBirth +
                 ", dateCreated=" + dateCreated +
                 ", age=" + age +
-                ", favourites=" + favourites +
+              //  ", favourites=" + favourites +
+                ", priceLevel=" + priceLevel +
+                ", types=" + types +
                 '}';
     }
 }

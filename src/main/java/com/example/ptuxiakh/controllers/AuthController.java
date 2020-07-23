@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
+import com.example.ptuxiakh.model.Types;
 import com.example.ptuxiakh.model.auth.Role;
 import com.example.ptuxiakh.model.auth.RoleName;
 import com.example.ptuxiakh.model.auth.User;
@@ -91,7 +92,7 @@ public class AuthController {
         signUpRequest.setUsername(signUpRequest.getEmail());
 
         User user = new User(signUpRequest.getFirstName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-                signUpRequest.getLastName(), "user", signUpRequest.getDateOfBirth(), signUpRequest.getGender());
+                signUpRequest.getLastName(), "user", signUpRequest.getDateOfBirth(), signUpRequest.getGender(), 0, new Types());
 
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
