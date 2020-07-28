@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -22,19 +22,22 @@ public class UserServiceImpl implements UserService{
 
     /**
      * Returns true in case favourites are not null or empty
+     *
      * @param userId
      * @return
      */
     @Override
     public Boolean getFirstTimer(String userId) {
-        User user = userRepository.findById(userId).orElseThrow( ()-> new RuntimeException("cant find user"));
-        try{
-         //   if (user.getFavourites() == null || user.getFavourites().isEmpty())
-         //       return false;
-        }catch (Exception exc){
-            return false;
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("cant find user"));
+        try {
+            List<UserRecommenderModel> userData = userRecommenderRepository.findAllByUserId(userId);
+            if (userData == null || userData.isEmpty()) {
+                return true;
+            }
+        } catch (Exception exc) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -46,17 +49,17 @@ public class UserServiceImpl implements UserService{
     public ArrayList<Favourite> updateFavouritesForUser(String userId, ArrayList<Favourite> favourites) {
         if (userId == null)
             throw new NullPointerException("user is not provided");
-        User user = userRepository.findById(userId).orElseThrow( () -> new NullPointerException("cant find user"));
-   //     user.setFavourites(favourites);
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("cant find user"));
+        //     user.setFavourites(favourites);
         userRepository.save(user);
         return favourites;
     }
 
     @Override
     public List<User> getAllUsers() {
-        try{
+        try {
             return userRepository.findAll();
-        }catch (Exception exc ){
+        } catch (Exception exc) {
             exc.printStackTrace();
             return null;
         }
@@ -67,7 +70,7 @@ public class UserServiceImpl implements UserService{
         if (userId == null)
             throw new NullPointerException("userId cannot be null");
 
-        User result = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("cant find user"));
+        User result = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("cant find user"));
         return result;
     }
 
@@ -93,7 +96,8 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     *  use this function to update User without password...
+     * use this function to update User without password...
+     *
      * @param userId
      * @param updateUser
      * @return
@@ -106,17 +110,17 @@ public class UserServiceImpl implements UserService{
         if (updateUser == null)
             throw new NullPointerException("update user data empty");
 
-        User result = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("cant find user"));
+        User result = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("cant find user"));
 
         if (updateUser.getFavourites() != null)
-          //  result.setFavourites(updateUser.getFavourites());
-        if (updateUser.getAge() != 0)
-            result.setAge(updateUser.getAge());
+            //  result.setFavourites(updateUser.getFavourites());
+            if (updateUser.getAge() != 0)
+                result.setAge(updateUser.getAge());
         if (updateUser.getEmail() != null)
             result.setEmail(updateUser.getEmail());
         if (updateUser.getGender() != null)
             result.setGender(result.getGender());
-        System.out.println("this is the user:  "+result.toString());
+        System.out.println("this is the user:  " + result.toString());
         return userRepository.save(result);
     }
 
@@ -124,7 +128,7 @@ public class UserServiceImpl implements UserService{
     public User updateFavouritesUser(String userId, ArrayList<String> favourites) {
         if (userId == null || favourites.isEmpty() || favourites == null)
             throw new NullPointerException("favourites or user is not present");
-        User user = userRepository.findById(userId).orElseThrow( ()-> new NullPointerException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("User not found"));
 
         return null;
     }

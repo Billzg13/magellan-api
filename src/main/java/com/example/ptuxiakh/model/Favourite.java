@@ -4,14 +4,14 @@ public class Favourite {
 
     String placeId;
 
-    int rating;
+    String name;
 
     public Favourite() {
     }
 
-    public Favourite(String placeId, int rating) {
+    public Favourite(String placeId, String name) {
         this.placeId = placeId;
-        this.rating = rating;
+        this.name = name;
     }
 
     public String getPlaceId() {
@@ -22,11 +22,11 @@ public class Favourite {
         this.placeId = placeId;
     }
 
-    public int getRating() {
-        return rating;
+    public String getName() {
+        return name;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setName(String name) {
+        this.name = name;
     }
 }
