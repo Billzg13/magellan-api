@@ -40,7 +40,8 @@
       "favourites": [
         {
           "name": "string",
-          "placeId": "string"
+          "placeId": "string",
+          "rating": 0
         }
       ],
       "firstName": "string",

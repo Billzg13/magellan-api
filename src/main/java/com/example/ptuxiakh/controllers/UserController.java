@@ -53,7 +53,16 @@ public class UserController {
         }catch (Exception exc) {
             exc.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/recommender2")
+    public ResponseEntity getRecommenderData2(){
+        try{
+            return new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
+        }catch (Exception exc){
+            exc.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
