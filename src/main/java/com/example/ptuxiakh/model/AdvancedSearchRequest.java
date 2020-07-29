@@ -1,63 +1,171 @@
 package com.example.ptuxiakh.model;
 
-import com.example.ptuxiakh.model.PlacePackage.Location;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 public class AdvancedSearchRequest {
-    int rating;
-    int radius;
-    Location center;
-    String category;
-    int price;
+
+    String gender;
+
+    int genderNumeric;
+
+    int age;
+
+    @Min(0)
+    @Max(5)
+    int priceLevel; // 0 - 5
+
+    @Min(0)
+    @Max(5)
+    int restaurant;
+
+    @Min(0)
+    @Max(5)
+    int lodging;
+
+    @Min(0)
+    @Max(5)
+    int food;
+
+    @Min(0)
+    @Max(5)
+    int pointOfInterest;
+
+    @Min(0)
+    @Max(5)
+    int establishment;
+
+    @Min(0)
+    @Max(5)
+    int bar;
+
+    @Min(0)
+    @Max(5)
+    int cafe;
+
+    @Min(0)
+    @Max(5)
+    int health;
+
+    @Min(0)
+    @Max(5)
+    int gym;
 
 
     public AdvancedSearchRequest() {
     }
 
-    public AdvancedSearchRequest(int rating, int radius, Location center, String category, int price) {
-        this.rating = rating;
-        this.radius = radius;
-        this.center = center;
-        this.category = category;
-        this.price = price;
+    public String getGender() {
+        return gender;
     }
 
-    public int getRating() {
-        return rating;
+    public void setGender(String gender) {
+        this.gender = gender;
+        if (gender == "male")
+            this.genderNumeric = 0;
+        else if (gender == "female")
+            this.genderNumeric = 1;
+        else
+            this.genderNumeric = 2; //in case "other" is selected
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public int getGenderNumeric() {
+        return genderNumeric;
     }
 
-    public int getRadius() {
-        return radius;
+    public void setGenderNumeric(int genderNumeric) {
+        this.genderNumeric = genderNumeric;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public int getAge() {
+        return age;
     }
 
-    public Location getCenter() {
-        return center;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public void setCenter(Location center) {
-        this.center = center;
+    public int getPriceLevel() {
+        return priceLevel;
     }
 
-    public String getCategory() {
-        return category;
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public int getRestaurant() {
+        return restaurant;
     }
 
-    public int getPrice() {
-        return price;
+    public void setRestaurant(int restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public int getLodging() {
+        return lodging;
     }
+
+    public void setLodging(int lodging) {
+        this.lodging = lodging;
+    }
+
+    public int getFood() {
+        return food;
+    }
+
+    public void setFood(int food) {
+        this.food = food;
+    }
+
+    public int getPointOfInterest() {
+        return pointOfInterest;
+    }
+
+    public void setPointOfInterest(int pointOfInterest) {
+        this.pointOfInterest = pointOfInterest;
+    }
+
+    public int getEstablishment() {
+        return establishment;
+    }
+
+    public void setEstablishment(int establishment) {
+        this.establishment = establishment;
+    }
+
+    public int getBar() {
+        return bar;
+    }
+
+    public void setBar(int bar) {
+        this.bar = bar;
+    }
+
+    public int getCafe() {
+        return cafe;
+    }
+
+    public void setCafe(int cafe) {
+        this.cafe = cafe;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getGym() {
+        return gym;
+    }
+
+    public void setGym(int gym) {
+        this.gym = gym;
+    }
+
+
 }

@@ -74,6 +74,7 @@ public class SearchServiceImpl implements SearchService {
         if (advancedSearchRequest == null)
             throw new NullPointerException("quickSearch null");
         User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("cant find user"));
+
         SearchRequest searchRequest = new SearchRequest(user, TypeOfSearch.ADVANCED_SEARCH, advancedSearchRequest);
         //This is the point where we send the search to python Service in order to get the result of the search
         //should this be sync or async?

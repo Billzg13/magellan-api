@@ -44,13 +44,14 @@ public class User {
     private String gender;
 
     @JsonProperty("dob")
-    private Date dateOfBirth;;
+    private Date dateOfBirth;
+    ;
 
     private Date dateCreated;
 
     int age;
 
-    //ArrayList<Favourite> favourites;
+    ArrayList<Favourite> favourites;
 
     @Min(0)
     @Max(5)
@@ -96,7 +97,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.dateCreated = dateCreated;
         this.age = age;
-        //this.favourites = favourites;
+        this.favourites = favourites;
     }
 
     public User(String id, @NotBlank @Size(max = 40) String firstName, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles, @NotBlank @Size(min = 4, max = 40) String lastName, String role, String gender, Date dateOfBirth, Date dateCreated, int age, ArrayList<Favourite> favourites, int priceLevel, Types types) {
@@ -214,13 +215,13 @@ public class User {
         this.role = role;
     }
 
-    //public ArrayList<Favourite> getFavourites() {
-    //    return favourites;
-    //}
+    public ArrayList<Favourite> getFavourites() {
+        return favourites;
+    }
 
-    //public void setFavourites(ArrayList<Favourite> favourites) {
-    //    this.favourites = favourites;
-    //}
+    public void setFavourites(ArrayList<Favourite> favourites) {
+        this.favourites = favourites;
+    }
 
     public int getPriceLevel() {
         return priceLevel;
@@ -253,7 +254,7 @@ public class User {
                 ", dateOfBirth=" + dateOfBirth +
                 ", dateCreated=" + dateCreated +
                 ", age=" + age +
-              //  ", favourites=" + favourites +
+                ", favourites=" + favourites +
                 ", priceLevel=" + priceLevel +
                 ", types=" + types +
                 '}';

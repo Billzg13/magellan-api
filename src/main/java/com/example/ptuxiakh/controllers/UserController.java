@@ -45,6 +45,7 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/recommender")
     public ResponseEntity getRecommenderData(){
         try{
@@ -52,25 +53,33 @@ public class UserController {
         }catch (Exception exc) {
             exc.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/recommender2")
+    public ResponseEntity getRecommenderData2(){
+        try{
+            return new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
+        }catch (Exception exc){
+            exc.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-    //TODO probably dont need this anymore UPDATE we need this but favourites will be removed
     @GetMapping("/first")
     public ResponseEntity getFirstTime(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String userId = tokenProvider.extractUserIdFromJwt(token);
-
+        //if userService.getFirstTimer returns true then its first time user else its
         if (userService.getFirstTimer(userId))
-            return ResponseEntity.ok(new FirstTimeLogin(Boolean.FALSE));
+            return ResponseEntity.ok(new FirstTimeLogin(Boolean.TRUE));
 
-        return ResponseEntity.ok(new FirstTimeLogin(Boolean.TRUE));
+        return ResponseEntity.ok(new FirstTimeLogin(Boolean.FALSE));
     }
 
-    //TODO change route to api/users/me
-    @GetMapping("/single/{userId}")
+
+    @GetMapping("/me")
     public ResponseEntity getSingleUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String userId = tokenProvider.extractUserIdFromJwt(token);
@@ -85,48 +94,6 @@ public class UserController {
             exc.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @PutMapping("/updateUser/{userId}")
-    public ResponseEntity updateUser(@PathVariable String userId, @RequestBody UserViewModel updateUser) {
-        try {
-            if (userId == null)
-                return new ResponseEntity(new ErrorResponse("no user is provided"), HttpStatus.BAD_REQUEST);
-            if (updateUser == null)
-                return new ResponseEntity(new ErrorResponse("no update data is provided"), HttpStatus.BAD_REQUEST);
-
-            User result = userService.updateUserNoAuth(userId, updateUser);
-
-            if (result != null)
-                return new ResponseEntity(result, HttpStatus.OK);
-
-            return new ResponseEntity(new ErrorResponse("something went wrong"), HttpStatus.OK);
-
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return new ResponseEntity(new ErrorResponse("something went wrong during update"), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PutMapping("/update/favourites")
-    public ResponseEntity updateFavourites(HttpServletRequest request, @RequestBody UpdateFavouritesRequest updateFavouritesRequest) {
-        String token = request.getHeader("Authorization").substring(7);
-        String userId = tokenProvider.extractUserIdFromJwt(token);
-        try {
-            if (updateFavouritesRequest == null || updateFavouritesRequest.getFavourites() == null) // <-- This will throw a null Exception!!!
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
-            ArrayList<Favourite> result = userService.updateFavouritesForUser(userId, updateFavouritesRequest.getFavourites());
-            if (result != null)
-                return ResponseEntity.ok(result);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (NullPointerException exc){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        catch (Exception exc) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
     }
 
     /**
