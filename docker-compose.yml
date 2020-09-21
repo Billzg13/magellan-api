@@ -13,7 +13,7 @@ services:
 
 
   web:
-    image: nginx:1.17.5-alpine
+    image: nginx
     restart: always
     volumes:
       - ~/magellan-ui/dist/magellan:/public_html
