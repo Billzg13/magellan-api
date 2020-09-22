@@ -139,9 +139,12 @@ public class UserServiceImpl implements UserService {
         if (userId == null || user == null)
             throw new NullPointerException("cant update if something is null");
 
-        user.setId(userId);
-        if (userRepository.existsById(userId))
-            return userRepository.save(user);
-        return null;
+        User result = userRepository.findById(userId).orElseThrow( ()-> new RuntimeException("cant find user"));
+        if (user.getFavourites() != null)
+            result.setFavourites(user.getFavourites());
+
+        return userRepository.save(result);
     }
+
+
 }
