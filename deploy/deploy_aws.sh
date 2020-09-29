@@ -6,7 +6,7 @@ sshpass -p 'secret12345' ssh magellan@18.157.184.133 <<EOF
 ls -l
 ls -l ~/.ssh
 eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/githubPtyxiaki
+ssh-add /home/magellan/.ssh/githubPtyxiaki
 rm -rf magellan-api
 git clone git@github.com:Billzg13/magellan-api.git
 EOF
