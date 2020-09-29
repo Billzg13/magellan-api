@@ -4,7 +4,7 @@ echo "in deploy_aws"
 #ssh magellan@18.157.184.133
 sshpass -p 'secret12345' ssh magellan@18.157.184.133 <<EOF
 eval "$(ssh-agent -s)"
-ssh-add githubPtyxiaki
+ssh-add ~/githubPtyxiaki
 rm -rf magellan-api
 git clone git@github.com:Billzg13/magellan-api.git
 EOF
