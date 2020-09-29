@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "in deploy_aws"
-ssh ubuntu@18.157.184.133
+ssh magellan@18.157.184.133
 echo "succesfull ssh"
 
 eval "$(ssh-agent -s)"
