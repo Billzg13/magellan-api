@@ -2,7 +2,7 @@
 
 echo "in deploy_aws"
 #ssh magellan@18.157.184.133
-sshpass -p 'secret12345' ssh magellan@18.157.184.133 <<EOF
+sshpass -p 'secret12345' ssh -o stricthostkeychecking=no magellan@18.157.184.133 <<EOF
 ls -l
 ls -l ~/.ssh
 eval "$(ssh-agent -s)"
