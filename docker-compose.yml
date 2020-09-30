@@ -18,7 +18,7 @@ services:
     volumes:
       - ~/magellan-ui/dist/magellan:/public_html
       - ./conf.d_prod:/etc/nginx/conf.d/
-      - ~/resources/images/:/public_html/assets/img2/
+  #    - ~/resources/images/:/public_html/assets/img2/
     ports:
       - 80:80
 
