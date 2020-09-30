@@ -1,6 +1,5 @@
 package com.example.ptuxiakh.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

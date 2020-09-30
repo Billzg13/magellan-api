@@ -1,9 +1,12 @@
 package com.example.ptuxiakh.services;
 
 import com.example.ptuxiakh.model.Favourite;
+import com.example.ptuxiakh.model.PlacePackage.Place;
+import com.example.ptuxiakh.model.Types;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.model.viewModels.UserRecommenderModel;
 import com.example.ptuxiakh.model.viewModels.UserViewModel;
+import com.example.ptuxiakh.repository.PlaceRepository;
 import com.example.ptuxiakh.repository.UserRecommenderRepository;
 import com.example.ptuxiakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     UserRecommenderRepository userRecommenderRepository;
+
+    @Autowired
+    PlaceRepository placeRepository;
 
 
     /**
@@ -139,9 +145,91 @@ public class UserServiceImpl implements UserService {
         if (userId == null || user == null)
             throw new NullPointerException("cant update if something is null");
 
-        User result = userRepository.findById(userId).orElseThrow( ()-> new RuntimeException("cant find user"));
+        User result = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("cant find user"));
         if (user.getFavourites() != null)
             result.setFavourites(user.getFavourites());
+
+        Types types = user.getTypes();
+        types.setGym(types.getGym() + 1);
+
+        result.setTypes(types);
+
+        for (Favourite favourite : user.getFavourites()) {
+            Place place = placeRepository.findById(favourite.getPlaceId()).orElseThrow(() -> new RuntimeException("cant find place"));
+
+            for (String type : place.getTypes()) {
+                switch (type) {
+                    case "gym":
+                        if (types.getGym() >= 5)
+                            break;
+                        types.setGym(types.getGym()+1);
+                        break;
+                    case "bar":
+                        if (types.getBar() >= 5 )
+                            break;
+                        types.setBar(types.getBar()+1);
+                        break;
+                    case "cafe":
+                        if (types.getCafe() >= 5 )
+                            break;
+                        types.setCafe(types.getCafe()+1);
+                        break;
+                    case "establishment":
+                        if (types.getEstablishment() >= 5 )
+                            break;
+                        types.setEstablishment(types.getEstablishment()+1);
+                        break;
+                    case "food":
+                        if (types.getFood() >= 5 )
+                            break;
+                        types.setFood(types.getFood()+1);
+                        break;
+                    case "lodging":
+                        if (types.getLodging() >= 5 )
+                            break;
+                        types.setLodging(types.getLodging()+1);
+                        break;
+                    case "health":
+                        if (types.getHealth() >= 5 )
+                            break;
+                        types.setHealth(types.getHealth()+1);
+                        break;
+                    case "point_of_interest":
+                        if (types.getPointOfInterest() >= 5 )
+                            break;
+                        types.setPointOfInterest(types.getPointOfInterest()+1);
+                        break;
+                    case "restaurant":
+                        if (types.getRestaurant() >= 5 )
+                            break;
+                        types.setRestaurant(types.getRestaurant()+1);
+                        break;
+                    default:
+                        System.out.println("Looking forward to the Weekend");
+                }
+            }
+        }
+        UserRecommenderModel userRecommenderModel = new UserRecommenderModel();
+        userRecommenderModel.setAge(result.getAge());
+        userRecommenderModel.setGender(result.getGender());
+        userRecommenderModel.setPlaceId(1); //this comes from the favourite and this is also int
+        userRecommenderModel.setUserId(result.getId());
+
+        //these can be added when favourites loop is completed
+        userRecommenderModel.setBar(types.getBar());
+        userRecommenderModel.setCafe(types.getCafe());
+        userRecommenderModel.setEstablishment(types.getEstablishment());
+        userRecommenderModel.setGym(types.getGym());
+        userRecommenderModel.setHealth(types.getHealth());
+        userRecommenderModel.setLodging(types.getLodging());
+        userRecommenderModel.setPointOfInterest(types.getPointOfInterest());
+        userRecommenderModel.setFood(types.getFood());
+        userRecommenderModel.setRestaurant(types.getRestaurant());
+
+
+        result.setTypes(types);
+        userRecommenderRepository.insert(userRecommenderModel);
+        //also update types here and then update userRecommenderModel
 
         return userRepository.save(result);
     }
