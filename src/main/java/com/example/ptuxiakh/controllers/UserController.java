@@ -107,12 +107,14 @@ public class UserController {
     public ResponseEntity updateUser(HttpServletRequest request, @NotBlank @RequestBody User user){
         String token = request.getHeader("Authorization").substring(7);
         String userId = tokenProvider.extractUserIdFromJwt(token);
+        System.out.println("in api/users/update");
         try{
             if (user == null)
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             User result = userService.updateUserFinal(userId, user);
             return ResponseEntity.ok(result);
         }catch (NullPointerException exc){
+            exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse("provide necesary data"), HttpStatus.BAD_REQUEST);
         }
     }
