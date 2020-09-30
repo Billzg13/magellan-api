@@ -14,12 +14,10 @@ services:
 
   web:
     image: nginx:1.17.5-alpine
-    build:
-      context: ../magellan-ui
     restart: always
     volumes:
 #      - ~/magellan-ui/dist/magellan:/public_html
-      - ./dist/magellan:/public_html
+      - ./public_html/magellan:/public_html
       - ./conf.d_prod:/etc/nginx/conf.d/
     ports:
       - 80:80
