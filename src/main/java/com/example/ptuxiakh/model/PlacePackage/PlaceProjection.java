@@ -13,7 +13,7 @@ public class PlaceProjection {
 
     Double rating;
 
-    String id;
+    Long id;
 
     String vicinity;
 
@@ -61,7 +61,7 @@ public class PlaceProjection {
         phone = "210-9058679";
     }
 
-    public PlaceProjection(String name, Double rating, String id) {
+    public PlaceProjection(String name, Double rating, Long id) {
         this.name = name;
         this.rating = rating;
         this.id = id;
@@ -83,11 +83,11 @@ public class PlaceProjection {
         this.rating = rating;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

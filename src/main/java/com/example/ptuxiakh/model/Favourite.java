@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 
 public class Favourite {
 
-    String placeId;
+    Long placeId;
 
     String name;
 
@@ -16,17 +16,17 @@ public class Favourite {
     public Favourite() {
     }
 
-    public Favourite(String placeId, String name, int rating) {
+    public Favourite(Long placeId, String name, int rating) {
         this.placeId = placeId;
         this.name = name;
         this.rating = rating;
     }
 
-    public String getPlaceId() {
+    public Long getPlaceId() {
         return placeId;
     }
 
-    public void setPlaceId(String placeId) {
+    public void setPlaceId(Long placeId) {
         this.placeId = placeId;
     }
 

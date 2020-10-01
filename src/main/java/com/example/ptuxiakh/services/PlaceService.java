@@ -8,5 +8,5 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceProjection> getAllPlacesByType(String type);
     List<PlaceProjection> getAllPlaces();
-    Place getSinglePlace(String placeId);
+    Place getSinglePlace(Long placeId);
 }

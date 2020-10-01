@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.model.viewModels;
 
+import com.example.ptuxiakh.model.auth.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -76,16 +77,16 @@ gym: 0 - 5
     @Max(5)
     int gym;
 
-    int placeId;
+    Long placeId;
 
     public UserRecommenderModel() {
     }
 
-    public int getPlaceId() {
+    public Long getPlaceId() {
         return placeId;
     }
 
-    public void setPlaceId(int placeId) {
+    public void setPlaceId(Long placeId) {
         this.placeId = placeId;
     }
 
@@ -214,4 +215,23 @@ gym: 0 - 5
     public void setGym(int gym) {
         this.gym = gym;
     }
+
+    public void setData(User user, Long placeId){
+        this.placeId = placeId; //ccause this is Long
+        this.age =user.getAge();
+        setGender(user.getGender());
+        this.priceLevel = 1;
+
+
+        this.restaurant = user.getTypes().getRestaurant();
+        this.bar = user.getTypes().getBar();
+        this.food = user.getTypes().getFood();
+        this.establishment = user.getTypes().getEstablishment();
+        this.gym = user.getTypes().getGym();
+        this.pointOfInterest = user.getTypes().getLodging();
+        this.lodging = user.getTypes().getLodging();
+        this.cafe = user.getTypes().getCafe();
+        this.health = user.getTypes().getHealth();
+    }
+
 }

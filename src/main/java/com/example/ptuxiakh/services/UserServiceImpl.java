@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRecommenderRepository userRecommenderRepository;
 
+    @Autowired
+    PlaceRepository placeRepository;
+
 
 
     /**
@@ -148,8 +151,36 @@ public class UserServiceImpl implements UserService {
         if (user.getFavourites() != null)
             result.setFavourites(user.getFavourites());
 
+        Types types = new Types();
+        types.setBar(1);
+        types.setRestaurant(1);
+        types.setPointOfInterest(1);
+        types.setHealth(1);
+        types.setFood(1);
+        types.setLodging(1);
+        types.setEstablishment(1);
+        types.setCafe(1);
+        types.setGym(1);
 
-        return userRepository.save(result);
+        result.setTypes(types);
+        result = userRepository.save(result);
+
+
+        User finalResult = result;
+
+        for (Favourite favourite: result.getFavourites()){
+            System.out.println("in for loop");
+            System.out.println(favourite.toString());
+          //each favourite has an placeId
+            Place place = placeRepository.findById(favourite.getPlaceId()).orElseThrow(() -> new RuntimeException("cant find place"));
+            UserRecommenderModel userRecommenderModel = new UserRecommenderModel();
+            userRecommenderModel.setUserId(userId);
+            userRecommenderModel.setData(finalResult, favourite.getPlaceId()); //sets all data for usserRecommender Model
+            System.out.println("before save: "+userRecommenderModel.toString());
+            userRecommenderRepository.save(userRecommenderModel);
+        }
+
+        return result;
     }
 
 

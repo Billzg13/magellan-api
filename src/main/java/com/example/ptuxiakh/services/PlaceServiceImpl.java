@@ -36,7 +36,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place getSinglePlace(String placeId) {
+    public Place getSinglePlace(Long placeId) {
         if (placeId == null)
             throw new NullPointerException("placeId is null");
         return placeRepository.findById(placeId).orElseThrow(()-> new NullPointerException("cant find place"));

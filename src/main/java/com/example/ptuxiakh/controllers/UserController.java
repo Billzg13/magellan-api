@@ -97,8 +97,8 @@ public class UserController {
     }
 
     /**
-     * This is the final update User, all other update users will be removed,and their models
-     * The user model must have all the data!, user.id is not required
+     * used only on the first update for favourites only
+     *
      * @param request
      * @param user
      * @return

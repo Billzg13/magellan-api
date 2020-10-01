@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Document(collection = "places")
 public class Place {
     @Id
-    String id;
+    Long id;
 
     Geometry geometry;
 
@@ -42,7 +42,7 @@ public class Place {
     public Place() {
     }
 
-    public Place(String id, Geometry geometry, String icon, String name, OpeningHours openingHours, String placeId, Double rating, String reference, String scope, ArrayList<String> types, long userRatingsTotal, String vicinity, int priceLevel) {
+    public Place(Long id, Geometry geometry, String icon, String name, OpeningHours openingHours, String placeId, Double rating, String reference, String scope, ArrayList<String> types, long userRatingsTotal, String vicinity, int priceLevel) {
         this.id = id;
         this.geometry = geometry;
         this.icon = icon;
@@ -58,11 +58,11 @@ public class Place {
         this.priceLevel = priceLevel;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

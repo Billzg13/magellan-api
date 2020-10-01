@@ -45,7 +45,6 @@ public class User {
 
     @JsonProperty("dob")
     private Date dateOfBirth;
-    ;
 
     private Date dateCreated;
 
