@@ -23,6 +23,8 @@ public class PlaceController {
             return ResponseEntity.ok(placeService.getAllPlacesByType(type));
         } catch (NullPointerException exc) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (IllegalArgumentException exc){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

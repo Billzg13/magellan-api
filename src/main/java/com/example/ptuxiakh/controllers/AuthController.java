@@ -31,7 +31,7 @@ import java.util.GregorianCalendar;
 
 /**
  * This controller is used for auth purposes
- *
+ * TODO refactor!
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -116,8 +116,6 @@ public class AuthController {
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
-
-
 
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity deleteUser(@PathVariable String userId){

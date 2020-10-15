@@ -1,13 +1,13 @@
 package com.example.ptuxiakh.services;
 
 import com.example.ptuxiakh.model.PlacePackage.Place;
+import com.example.ptuxiakh.model.PlacePackage.PlaceMapper;
 import com.example.ptuxiakh.model.PlacePackage.PlaceProjection;
 import com.example.ptuxiakh.repository.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -15,24 +15,20 @@ public class PlaceServiceImpl implements PlaceService {
     @Autowired
     PlaceRepository placeRepository;
 
+    PlaceMapper placeMapper = new PlaceMapper();
+
     @Override
     public List<PlaceProjection> getAllPlacesByType(String type) {
-        if (type == null)
+        if (type == null || type.isEmpty())
             throw new NullPointerException("type is empty");
-        List<Place> places = placeRepository.findAllByTypes(type);
-        return places.stream().map(place -> {
-            PlaceProjection placeProjection = new PlaceProjection(place);
-            return placeProjection;
-        }).collect(Collectors.toList());
+
+        return placeMapper.toListPlaceProjection(placeRepository.findAllByTypes(type));
     }
 
     @Override
     public List<PlaceProjection> getAllPlaces() {
         List<Place> places = placeRepository.findAll();
-        return places.stream().map(place -> {
-            PlaceProjection placeProjection = new PlaceProjection(place);
-            return placeProjection;
-        }).collect(Collectors.toList());
+        return placeMapper.toListPlaceProjection(places);
     }
 
     @Override
@@ -41,4 +37,6 @@ public class PlaceServiceImpl implements PlaceService {
             throw new NullPointerException("placeId is null");
         return placeRepository.findById(placeId).orElseThrow(()-> new NullPointerException("cant find place"));
     }
+
+
 }
