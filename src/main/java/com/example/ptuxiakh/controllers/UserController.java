@@ -1,14 +1,13 @@
 package com.example.ptuxiakh.controllers;
 
 
-import com.example.ptuxiakh.model.Favourite;
 import com.example.ptuxiakh.model.FirstTimeLogin;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.model.errors.ErrorResponse;
-import com.example.ptuxiakh.model.viewModels.UpdateFavouritesRequest;
-import com.example.ptuxiakh.model.viewModels.UserViewModel;
 import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -26,46 +23,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
     @Autowired
     UserService userService;
 
     @Autowired
     JwtTokenProvider tokenProvider;
 
-    //TODO why do we need this?
-    @GetMapping("/all")
-    public ResponseEntity getAllUsers() {
-        try {
-            List<User> result = userService.getAllUsers();
-            System.out.println(result);
-            return new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
 
     @GetMapping("/recommender")
-    public ResponseEntity getRecommenderData(){
-        try{
+    public ResponseEntity getRecommenderData() {
+        try {
             return new ResponseEntity(userService.getAllUsersRecommender(), HttpStatus.OK);
-        }catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/recommender2")
-    public ResponseEntity getRecommenderData2(){
-        try{
-            return new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
-        }catch (Exception exc){
-            exc.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
     @GetMapping("/first")
     public ResponseEntity getFirstTime(HttpServletRequest request) {
@@ -78,24 +54,6 @@ public class UserController {
         return ResponseEntity.ok(new FirstTimeLogin(Boolean.FALSE));
     }
 
-
-    @GetMapping("/me")
-    public ResponseEntity getSingleUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        String userId = tokenProvider.extractUserIdFromJwt(token);
-        if (userId == null)
-            return new ResponseEntity(new ErrorResponse("no user is selected"), HttpStatus.BAD_REQUEST);
-        try {
-            User result = userService.getSingleUser(userId);
-            if (result != null)
-                return new ResponseEntity(result, HttpStatus.OK);
-            return new ResponseEntity(new ErrorResponse("user cannot be found"), HttpStatus.NOT_FOUND);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     /**
      * used only on the first update for favourites only
      *
@@ -104,16 +62,16 @@ public class UserController {
      * @return
      */
     @PutMapping("/update")
-    public ResponseEntity updateUser(HttpServletRequest request, @NotBlank @RequestBody User user){
+    public ResponseEntity updateUser(HttpServletRequest request, @NotBlank @RequestBody User user) {
         String token = request.getHeader("Authorization").substring(7);
         String userId = tokenProvider.extractUserIdFromJwt(token);
         System.out.println("in api/users/update");
-        try{
+        try {
             if (user == null)
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             User result = userService.updateUserFinal(userId, user);
             return ResponseEntity.ok(result);
-        }catch (NullPointerException exc){
+        } catch (NullPointerException exc) {
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse("provide necesary data"), HttpStatus.BAD_REQUEST);
         }

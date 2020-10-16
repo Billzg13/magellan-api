@@ -2,6 +2,8 @@ package com.example.ptuxiakh.controllers;
 
 
 import com.example.ptuxiakh.services.PlaceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/places")
 public class PlaceController {
+    Logger logger = LoggerFactory.getLogger(PlaceController.class);
 
     @Autowired
     PlaceService placeService;

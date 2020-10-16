@@ -4,5 +4,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AdvancedRecommender {
 
-    ResponseEntity<Object> recommend();
+    Object recommend(String pythonBaseUrl);
 }

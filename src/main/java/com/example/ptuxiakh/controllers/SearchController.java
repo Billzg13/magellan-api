@@ -1,10 +1,8 @@
 package com.example.ptuxiakh.controllers;
 
-import com.example.ptuxiakh.model.AdvancedSearchRequest;
 import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.SearchService;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,47 +26,17 @@ public class SearchController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
-
-    //SYNCHRONOUS
     @PostMapping("/quick")
-    public ResponseEntity quickSearch(HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization").substring(7);
-            String userId = tokenProvider.extractUserIdFromJwt(token);
-
-            ResponseEntity result = searchService.quickSearh(userId);
-            result.getBody();
-            return ResponseEntity.ok(result.getBody());
-
-        }catch (NullPointerException exc){
-            exc.printStackTrace();
-            return new ResponseEntity(new Error(exc.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception exc) {
-            exc.printStackTrace();
-            return new ResponseEntity(new Error("something went wrong"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/quick2")
-    public ResponseEntity quickSearch2(HttpServletRequest request, Authorization authorization){
-        System.out.println(authorization.toString());
+    public ResponseEntity quickSearch(HttpServletRequest request){
+        logger.debug("In action: quickSearch");
         try{
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-
-            Object result = searchService.quickSearch2(userId);
-            if (result == null){
-                return new ResponseEntity(new ErrorResponse("yo s"),HttpStatus.BAD_REQUEST);
-                //return new ResponseEntity(new Error("cant find any recommendation"), HttpStatus.BAD_REQUEST);
-            }
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(searchService.quickSearch(userId));
         }catch (NullPointerException exc){
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
         }catch (Exception exc) {
-            //exc.printStackTrace();
-            System.out.println("i am in here");
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -84,41 +52,25 @@ public class SearchController {
     String category
     int price
      */
-    @PostMapping("/advanced")
-    public ResponseEntity advancedSearch(HttpServletRequest request, @RequestBody AdvancedSearchRequest advancedSearchRequest){
-        try{
-            if (advancedSearchRequest == null)
-                return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
-            String token = request.getHeader("Authorization").substring(7);
-            String userId = tokenProvider.extractUserIdFromJwt(token);
-            Object result = searchService.advancedSearch(userId, advancedSearchRequest);
-            return ResponseEntity.ok(result);
-
-        }catch (Exception exc){
-            exc.printStackTrace();
-            return new ResponseEntity(new Error("something went wrong"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     /**
      * the new advanced search route
      * @param request
      * @param advancedSearch
      * @return
      */
-    @PostMapping("/advanced2")
-    public  ResponseEntity advancedSearch2(HttpServletRequest request, @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch){
+    @PostMapping("/advanced")
+    public  ResponseEntity advancedSearch(HttpServletRequest request, @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch){
+        logger.debug("In action: advancedSearch "+advancedSearch.toString());
         try{
             if (advancedSearch == null)
                 return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
 
-            return ResponseEntity.ok( searchService.advancedSearch2(userId, advancedSearch));
+            return ResponseEntity.ok( searchService.advancedSearch(userId, advancedSearch));
         }catch (Exception exc){
-            return new ResponseEntity(new Error("something went wrong"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new Error(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 }

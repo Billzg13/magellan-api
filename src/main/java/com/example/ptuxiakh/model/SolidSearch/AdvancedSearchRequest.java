@@ -59,4 +59,15 @@ public class AdvancedSearchRequest {
     public void setCenter(Location center) {
         this.center = center;
     }
+
+    @Override
+    public String toString() {
+        return "AdvancedSearchRequest{" +
+                "radius=" + radius +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", rating=" + rating +
+                ", center=" + center +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ import com.example.ptuxiakh.model.Types;
 import com.example.ptuxiakh.model.auth.Role;
 import com.example.ptuxiakh.model.auth.RoleName;
 import com.example.ptuxiakh.model.auth.User;
+import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.payload.ApiResponse;
 import com.example.ptuxiakh.payload.JwtAuthenticationResponse;
 import com.example.ptuxiakh.payload.LoginRequest;
@@ -79,7 +80,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        System.out.println(signUpRequest.toString());
+        //System.out.println(signUpRequest.toString());
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
@@ -102,6 +103,7 @@ public class AuthController {
         user.setRoles(Collections.singleton(userRole));
         user.setDateCreated(new Date());
 
+        //make a function for this?
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(signUpRequest.getDateOfBirth());
         int year = calendar.get(Calendar.YEAR);
@@ -115,28 +117,5 @@ public class AuthController {
                 .buildAndExpand(result.getUsername()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-    }
-
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity deleteUser(@PathVariable String userId){
-        if (userId.isEmpty())
-            return new ResponseEntity<Error>(new Error("userId is empty"), HttpStatus.BAD_REQUEST);
-
-        userRepository.deleteById(userId);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @PutMapping("/edit/{userId}")
-    public ResponseEntity editUser(@PathVariable String userId, @RequestBody User user){
-        try {
-            if (userId.isEmpty() || user.equals(null)) {
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-            User result = userRepository.save(user);
-            return new ResponseEntity(result, HttpStatus.OK);
-        }catch (Exception exc){
-            exc.printStackTrace();
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
     }
 }
