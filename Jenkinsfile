@@ -7,6 +7,7 @@ pipeline {
                 sh 'ls'
                 sh 'chmod 0755 ./deploy/deplay_fake.sh'
                 sh 'chmod 0400 ./deploy/ptuxiakiKey.pem'
+                sh 'chmod 0755 ./deploy/deploy_script.sh'
                 sh './deploy/deplay_fake.sh'
             }
         }
