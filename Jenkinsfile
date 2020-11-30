@@ -1,6 +1,13 @@
 pipeline {
     agent any
     stages {
+        
+         stage('deploy') {
+            steps {
+                sh 'ls'
+                sh './deploy/deplay_fake.sh'
+            }
+        }
         stage('build') {
             steps {
                 sh 'docker build .'
@@ -12,11 +19,7 @@ pipeline {
                 echo 'hello from test'
             }
         }
-        
-        stage('deploy') {
-            steps {
-                sh './deploy/deplay_fake.sh'
-            }
-        }
+       
+       
     }
 }
