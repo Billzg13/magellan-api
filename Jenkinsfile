@@ -15,7 +15,7 @@ pipeline {
         
         stage('deploy') {
             steps {
-                echo 'hello from test'
+                sh './deploy/deplay_fake.sh'
             }
         }
     }
