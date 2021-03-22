@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/places")
 public class PlaceController {
@@ -18,12 +20,19 @@ public class PlaceController {
     PlaceService placeService;
 
     @GetMapping("/all")
-    public ResponseEntity getAllPlaces(@RequestParam(required = false) String type) {
+    public ResponseEntity getAllPlaces(
+            @RequestParam(required = false) List<String> types,
+            Integer pageSize,
+            Integer pageNo) {
         try {
-            if (type == null)
-                return ResponseEntity.ok(placeService.getAllPlaces());
+            if (types == null || types.isEmpty()){
+                return ResponseEntity.ok(placeService.getAllPlaces(pageSize, pageNo));
+            }
+            // pagination check
+            // types na ginoun array, check
+            // search by name mhm..
 
-            return ResponseEntity.ok(placeService.getAllPlacesByType(type));
+            return ResponseEntity.ok(placeService.getAllPlacesByTypes(types, pageSize, pageNo));
         } catch (NullPointerException exc) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch (IllegalArgumentException exc){

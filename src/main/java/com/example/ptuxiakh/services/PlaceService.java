@@ -6,7 +6,7 @@ import com.example.ptuxiakh.model.PlacePackage.PlaceProjection;
 import java.util.List;
 
 public interface PlaceService {
-    List<PlaceProjection> getAllPlacesByType(String type);
-    List<PlaceProjection> getAllPlaces();
+    List<PlaceProjection> getAllPlacesByTypes(List<String> types, int pageSize, int pageNo);
+    List<PlaceProjection> getAllPlaces(int pageSize, int pageNo);
     Place getSinglePlace(Long placeId);
 }
