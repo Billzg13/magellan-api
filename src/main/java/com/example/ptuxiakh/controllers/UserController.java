@@ -25,13 +25,11 @@ import javax.validation.constraints.NotBlank;
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
     @Autowired
     UserService userService;
 
     @Autowired
     JwtTokenProvider tokenProvider;
-
 
     @GetMapping("/recommender")
     public ResponseEntity getRecommenderData() {
@@ -75,7 +73,28 @@ public class UserController {
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse("provide necesary data"), HttpStatus.BAD_REQUEST);
         }
+        // dont return anything only an empty 204
     }
+
+    /**
+     * @param request
+     * @param slim
+     * @return
+     */
+    @GetMapping("/favourites")
+    public ResponseEntity getUserFavourites(HttpServletRequest request, @RequestParam(defaultValue = "slim") String slim) {
+        String token = request.getHeader("Authorization").substring(7);
+        String userId = tokenProvider.extractUserIdFromJwt(token);
+        try {
+            if (slim.equals("slim"))
+                return ResponseEntity.ok(userService.getFavouritesSlim(userId));
+            return ResponseEntity.ok(userService.getFavourites(userId));
+        } catch (Exception exc) {
+            return new ResponseEntity(new ErrorResponse("error mate"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // route that returns all favourites for a user slim or full
 
 
 }
