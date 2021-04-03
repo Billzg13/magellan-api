@@ -22,19 +22,17 @@ public class PlaceController {
     @GetMapping("/all")
     public ResponseEntity getAllPlaces(
             @RequestParam(required = false) List<String> types,
-            Integer pageSize,
-            Integer pageNo) {
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNo) {
         try {
             if (types == null || types.isEmpty()){
                 return ResponseEntity.ok(placeService.getAllPlaces(pageSize, pageNo));
             }
-            // pagination check
-            // types na ginoun array, check
-            // search by name mhm..
-
             return ResponseEntity.ok(placeService.getAllPlacesByTypes(types, pageSize, pageNo));
         } catch (NullPointerException exc) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            System.out.println(exc.getMessage());
+            //System.out.println(exc.get);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }catch (IllegalArgumentException exc){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
