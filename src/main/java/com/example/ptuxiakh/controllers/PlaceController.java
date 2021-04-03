@@ -30,8 +30,6 @@ public class PlaceController {
             }
             return ResponseEntity.ok(placeService.getAllPlacesByTypes(types, pageSize, pageNo));
         } catch (NullPointerException exc) {
-            System.out.println(exc.getMessage());
-            //System.out.println(exc.get);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }catch (IllegalArgumentException exc){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
