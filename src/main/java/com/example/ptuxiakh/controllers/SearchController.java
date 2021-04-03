@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
+import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.security.JwtTokenProvider;
 import com.example.ptuxiakh.services.SearchService;
@@ -32,7 +33,9 @@ public class SearchController {
         try{
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            return ResponseEntity.ok(searchService.quickSearch(userId));
+            QuickSearchResponse response = searchService.quickSearch(userId);
+            searchService.saveSearch(userId, response);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         }catch (NullPointerException exc){
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
