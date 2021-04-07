@@ -77,6 +77,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public List<QuickSearchHistoryV2> getLatestQuickSearches(String userId) {
+        return quickSearchHistoryRepositoryV2.findAllByUserId(userId);
+    }
+
+    @Override
     public Object advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest) throws Exception {
         User user = getUser(userId);
         if (advancedSearchRequest == null)

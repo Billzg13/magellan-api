@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +33,21 @@ public class SearchController {
             QuickSearchResponse response = searchService.quickSearch(userId);
             searchService.saveSearch(userId, response);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch (NullPointerException exc){
+            exc.printStackTrace();
+            return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
+        }catch (Exception exc) {
+            return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/quick/user")
+    public ResponseEntity getLatestQuickSearches(HttpServletRequest request){
+        logger.debug("In action: quickSearch");
+        try{
+            String token = request.getHeader("Authorization").substring(7);
+            String userId = tokenProvider.extractUserIdFromJwt(token);
+            return ResponseEntity.ok(searchService.getLatestQuickSearches(userId));
         }catch (NullPointerException exc){
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
