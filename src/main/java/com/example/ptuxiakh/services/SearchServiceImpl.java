@@ -60,18 +60,18 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Boolean saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
+        System.out.println("In saveSearch");
         //so we basically wanna save the search response but we only have up to 5 responses per user
-        com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2 quickSearchHistoryV2 =
-                new com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2(userId, quickSearchResponse, new Date());
+        QuickSearchHistoryV2 quickSearchHistoryV2 =
+                new QuickSearchHistoryV2(userId, quickSearchResponse, new Date());
         List<QuickSearchHistoryV2> quickSearches = quickSearchHistoryRepositoryV2.findAllByUserId(userId);
         if (!quickSearches.isEmpty()){
             if (quickSearches.size() > 4) {
                 Collections.sort(quickSearches);
-                for ( QuickSearchHistoryV2 quickSearchHistoryV21 :quickSearches.subList(4, quickSearches.size())){
-                    quickSearchHistoryRepositoryV2.delete(quickSearchHistoryV21);
-                }
+                quickSearchHistoryRepositoryV2.delete(quickSearches.get(0));
             }
         }
+
         quickSearchHistoryRepositoryV2.save(quickSearchHistoryV2);
         return null;
     }
