@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +58,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Boolean saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
+    public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
+        return quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
+    }
+
+    @Override
+    public String saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
         System.out.println("In saveSearch");
         //so we basically wanna save the search response but we only have up to 5 responses per user
         QuickSearchHistoryV2 quickSearchHistoryV2 =
@@ -72,8 +76,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
-        quickSearchHistoryRepositoryV2.save(quickSearchHistoryV2);
-        return null;
+        return quickSearchHistoryRepositoryV2.save(quickSearchHistoryV2).getId();
     }
 
     @Override

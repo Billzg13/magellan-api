@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.controllers;
 
+import com.example.ptuxiakh.model.QuickSearchResult;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.errors.ErrorResponse;
 import com.example.ptuxiakh.security.JwtTokenProvider;
@@ -7,6 +8,7 @@ import com.example.ptuxiakh.services.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +33,12 @@ public class SearchController {
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
             QuickSearchResponse response = searchService.quickSearch(userId);
-            searchService.saveSearch(userId, response);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(
+                    new QuickSearchResult(
+                            searchService.saveSearch(userId, response)
+                    ),
+                    HttpStatus.OK
+            );
         }catch (NullPointerException exc){
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
@@ -48,6 +54,19 @@ public class SearchController {
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
             return ResponseEntity.ok(searchService.getLatestQuickSearches(userId));
+        }catch (NullPointerException exc){
+            exc.printStackTrace();
+            return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
+        }catch (Exception exc) {
+            return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/quick/search")
+    public ResponseEntity getLatestQuickSearches(HttpServletRequest request, @RequestParam String searchId){
+        logger.debug("In action: quickSearch");
+        try{
+            return ResponseEntity.ok(searchService.findQuickSearchById(searchId));
         }catch (NullPointerException exc){
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);

@@ -8,9 +8,11 @@ import java.util.List;
 public interface SearchService {
     QuickSearchResponse quickSearch(String userId) throws Exception;
 
-    Boolean saveSearch(String userId, QuickSearchResponse quickSearchResponse);
+    String saveSearch(String userId, QuickSearchResponse quickSearchResponse);
 
     List<QuickSearchHistoryV2> getLatestQuickSearches(String userId);
+
+    QuickSearchHistoryV2 findQuickSearchById(String searchId);
 
     Object advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch) throws Exception;
 }

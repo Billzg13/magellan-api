@@ -1,24 +1,24 @@
 package com.example.ptuxiakh.model.SolidSearch;
 
-import com.example.ptuxiakh.model.Favourite;
+import com.example.ptuxiakh.model.SearchResult;
 
 import java.util.ArrayList;
 
 public class QuickSearchResponse {
-    ArrayList<Favourite> result = new ArrayList<>();
+    ArrayList<SearchResult> result = new ArrayList<>();
 
-    public QuickSearchResponse(ArrayList<Favourite> result) {
+    public QuickSearchResponse(ArrayList<SearchResult> result) {
         this.result = result;
     }
 
     public QuickSearchResponse() {
     }
 
-    public ArrayList<Favourite> getResult() {
+    public ArrayList<SearchResult> getResult() {
         return result;
     }
 
-    public void setResult(ArrayList<Favourite> result) {
+    public void setResult(ArrayList<SearchResult> result) {
         this.result = result;
     }
 
