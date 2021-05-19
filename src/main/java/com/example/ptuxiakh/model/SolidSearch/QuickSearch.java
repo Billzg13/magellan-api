@@ -15,7 +15,7 @@ public class QuickSearch extends SearchRequest implements SimpleRecommender {
     }
 
     @Override
-    public Object recommend(String pythonBaseUrl) {
+    public QuickSearchResponse recommend(String pythonBaseUrl) {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -26,7 +26,11 @@ public class QuickSearch extends SearchRequest implements SimpleRecommender {
 
             HttpEntity<QuickSearch> entity = new HttpEntity<>(this, headers);
 
-            ResponseEntity<Object> responseEntity = restTemplate.postForEntity(requestUrl, entity, Object.class);
+            ResponseEntity<QuickSearchResponse> responseEntity = restTemplate.postForEntity(
+                    requestUrl,
+                    entity,
+                    QuickSearchResponse.class
+                    );
             if (responseEntity.getStatusCode().is2xxSuccessful()){
                 return responseEntity.getBody();
             }

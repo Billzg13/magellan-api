@@ -1,25 +1,17 @@
 package com.example.ptuxiakh.services;
 
-import com.example.ptuxiakh.model.AdvancedSearchRequest;
-import com.example.ptuxiakh.model.SearchRequest;
 import com.example.ptuxiakh.model.SolidSearch.AdvancedSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearch;
-import com.example.ptuxiakh.model.TypeOfSearch;
-import com.example.ptuxiakh.model.UserHistory;
+import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
+import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.auth.User;
-import com.example.ptuxiakh.repository.AdvancedSearchRepository;
-import com.example.ptuxiakh.repository.QuickSearchRepository;
-import com.example.ptuxiakh.repository.UserHistoryRepository;
-import com.example.ptuxiakh.repository.UserRepository;
+import com.example.ptuxiakh.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +25,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    QuickSearchHistoryRepositoryV2 quickSearchHistoryRepositoryV2;
 
     @Autowired
     UserHistoryRepository userHistoryRepository;
@@ -50,16 +45,43 @@ public class SearchServiceImpl implements SearchService {
      * @return
      */
     @Override
-    public Object quickSearch(String userId) throws Exception {
+    public QuickSearchResponse quickSearch(String userId) throws Exception {
         User user = getUser(userId);
         QuickSearch quickSearch = new QuickSearch(user);
-        Object response = quickSearch.recommend(pythonLocalUrl);
+        QuickSearchResponse response = quickSearch.recommend(pythonLocalUrl);
         if (response ==  null){
-            System.out.println("is response null?");
+            System.out.println(response);
             //if response is null something went wrong that we dont know off
             throw new Exception("something went wrong with python server");
         }
         return response;
+    }
+
+    @Override
+    public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
+        return quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
+    }
+
+    @Override
+    public String saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
+        System.out.println("In saveSearch");
+        //so we basically wanna save the search response but we only have up to 5 responses per user
+        QuickSearchHistoryV2 quickSearchHistoryV2 =
+                new QuickSearchHistoryV2(userId, quickSearchResponse, new Date());
+        List<QuickSearchHistoryV2> quickSearches = quickSearchHistoryRepositoryV2.findAllByUserId(userId);
+        if (!quickSearches.isEmpty()){
+            if (quickSearches.size() > 4) {
+                Collections.sort(quickSearches);
+                quickSearchHistoryRepositoryV2.delete(quickSearches.get(0));
+            }
+        }
+
+        return quickSearchHistoryRepositoryV2.save(quickSearchHistoryV2).getId();
+    }
+
+    @Override
+    public List<QuickSearchHistoryV2> getLatestQuickSearches(String userId) {
+        return quickSearchHistoryRepositoryV2.findAllByUserId(userId);
     }
 
     @Override

@@ -6,11 +6,10 @@ import com.example.ptuxiakh.model.PlacePackage.PlaceProjection;
 import com.example.ptuxiakh.repository.PlaceRepository;
 import com.example.ptuxiakh.repository.PlaceRepositoryV2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,24 +25,35 @@ public class PlaceServiceImpl implements PlaceService {
     PlaceMapper placeMapper = new PlaceMapper();
 
     @Override
-    public List<PlaceProjection> getAllPlacesByTypes(List<String> types, int pageSize, int pageNo) {
+    public List<PlaceProjection> getAllPlacesByTypes(List<String> types, Integer pageSize, Integer pageNo) {
+        // This is redudant but it's good practice when it comes to testing the actual function
+        if (pageNo == null || pageNo == null) {
+            throw new NullPointerException("pageSize or pageNo is null! ");
+        }
         Pageable firstPageWithTwoElements = PageRequest.of(pageNo, pageSize);
-
-        return placeMapper.toListPlaceProjection(placeRepositoryV2.findAllByTypes(types, firstPageWithTwoElements));
+        return placeMapper.toListPlaceProjection(
+                placeRepositoryV2.findAllByTypes(
+                        types,
+                        firstPageWithTwoElements)
+        );
     }
 
     @Override
-    public List<PlaceProjection> getAllPlaces(int pageSize, int pageNo) {
+    public List<PlaceProjection> getAllPlaces(Integer pageSize, Integer pageNo) {
+        if (pageNo == null || pageNo == null) {
+            throw new NullPointerException("pageSize or pageNo is null! ");
+        }
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Place> places = placeRepositoryV2.findAll(pageable);
-        return placeMapper.toListPlaceProjection(places.get().collect(Collectors.toList()));
+        return placeMapper.toListPlaceProjection(placeRepositoryV2.findAll(
+                pageable).get().collect(Collectors.toList())
+        );
     }
 
     @Override
     public Place getSinglePlace(Long placeId) {
         if (placeId == null)
             throw new NullPointerException("placeId is null");
-        return placeRepository.findById(placeId).orElseThrow(()-> new NullPointerException("cant find place"));
+        return placeRepository.findById(placeId).orElseThrow(() -> new NullPointerException("cant find place"));
     }
 
 
