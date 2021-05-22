@@ -1,5 +1,6 @@
 package com.example.ptuxiakh.services;
 
+import com.example.ptuxiakh.model.SearchResult;
 import com.example.ptuxiakh.model.SolidSearch.AdvancedSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     QuickSearchHistoryRepositoryV2 quickSearchHistoryRepositoryV2;
+
+    @Autowired
+    PlaceRepositoryV2 placeRepositoryV2;
 
     @Autowired
     UserHistoryRepository userHistoryRepository;
@@ -59,7 +64,11 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
-        return quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
+        QuickSearchHistoryV2 search = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
+        for (SearchResult searchResult :search.getQuickSearchResponse().getResult()){
+            searchResult.setPlace(placeRepositoryV2.findById(searchResult.getPlaceId()).orElseThrow(() -> new RuntimeException("can't find place")));
+        }
+        return search;
     }
 
     @Override
