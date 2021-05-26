@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -65,9 +62,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
         QuickSearchHistoryV2 search = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
-        for (SearchResult searchResult :search.getQuickSearchResponse().getResult()){
-            searchResult.setPlace(placeRepositoryV2.findById(searchResult.getPlaceId()).orElseThrow(() -> new RuntimeException("can't find place")));
-        }
+        //for (SearchResult searchResult :search.getQuickSearchResponse().getResult()){
+        //    searchResult.setPlace(placeRepositoryV2.findById(searchResult.getPlaceId()).orElseThrow(() -> new RuntimeException("can't find place")));
+        //}
         return search;
     }
 
@@ -75,6 +72,40 @@ public class SearchServiceImpl implements SearchService {
     public String saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
         System.out.println("In saveSearch");
         //so we basically wanna save the search response but we only have up to 5 responses per user
+        Map<Long, Double> summarys = new HashMap<>();
+        Map<Long, Integer> counts = new HashMap<>();
+        for (SearchResult searchResult : quickSearchResponse.getResult()){
+            if (summarys.containsKey(searchResult.getCorrelationWith())){
+                summarys.put(
+                        searchResult.getCorrelationWith(),
+                        summarys.get(searchResult.getCorrelationWith())+searchResult.getCorrelation()
+                );
+                if (counts.containsKey(searchResult.getCorrelationWith())) {
+                    counts.put(
+                            searchResult.getCorrelationWith(),
+                            counts.get(searchResult.getCorrelationWith()) + 1
+                    );
+                }
+            }else{
+                summarys.put(
+                        searchResult.getCorrelationWith(),
+                        searchResult.getCorrelation()
+                );
+                counts.put(
+                        searchResult.getCorrelationWith(),
+                        1
+                );
+            }
+            if (searchResult.getPlaceId() == 9999 ){
+                searchResult.setPlace(placeRepositoryV2.findByName(searchResult.getName()));
+                searchResult.setPlaceId(searchResult.getPlace().getId());
+            }
+        }
+        for (SearchResult searchResult : quickSearchResponse.getResult()){
+            searchResult.setCorrelation(
+                    summarys.get(searchResult.getCorrelationWith())/counts.get(searchResult.getCorrelationWith())
+            );
+        }
         QuickSearchHistoryV2 quickSearchHistoryV2 =
                 new QuickSearchHistoryV2(userId, quickSearchResponse, new Date());
         List<QuickSearchHistoryV2> quickSearches = quickSearchHistoryRepositoryV2.findAllByUserId(userId);

@@ -14,15 +14,9 @@ public class SearchResult {
     String name;
     Double correlation;
     Place place;
+    Long correlationWith;
 
     public SearchResult() {
-    }
-
-    public SearchResult(Long placeId, String name, Double correlation, Place place) {
-        this.placeId = placeId;
-        this.name = name;
-        this.correlation = correlation;
-        this.place = place;
     }
 
     public Long getPlaceId() {
@@ -55,5 +49,24 @@ public class SearchResult {
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public Long getCorrelationWith() {
+        return correlationWith;
+    }
+
+    public void setCorrelationWith(Long correlationWith) {
+        this.correlationWith = correlationWith;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchResult{" +
+                "placeId=" + placeId +
+                ", name='" + name + '\'' +
+                ", correlation=" + correlation +
+                ", place=" + place +
+                ", correlationWith=" + correlationWith +
+                '}';
     }
 }

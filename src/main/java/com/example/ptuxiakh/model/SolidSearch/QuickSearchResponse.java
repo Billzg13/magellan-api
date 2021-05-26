@@ -22,5 +22,10 @@ public class QuickSearchResponse {
         this.result = result;
     }
 
-
+    @Override
+    public String toString() {
+        return "QuickSearchResponse{" +
+                "result=" + result +
+                '}';
+    }
 }

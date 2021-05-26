@@ -11,4 +11,6 @@ public interface PlaceRepositoryV2 extends PagingAndSortingRepository<Place, Lon
 
     @Query("{ 'types' : { $all: ?0 } }")
     List<Place> findAllByTypes(List<String> types, Pageable pageable);
+
+    Place findByName(String name);
 }

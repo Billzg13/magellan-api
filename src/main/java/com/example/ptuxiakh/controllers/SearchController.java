@@ -43,6 +43,7 @@ public class SearchController {
             exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.BAD_REQUEST);
         }catch (Exception exc) {
+            exc.printStackTrace();
             return new ResponseEntity(new ErrorResponse(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
