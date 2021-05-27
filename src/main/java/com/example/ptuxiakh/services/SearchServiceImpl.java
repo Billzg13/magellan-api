@@ -1,5 +1,8 @@
 package com.example.ptuxiakh.services;
 
+import com.example.ptuxiakh.model.AdvancedSearchRequest;
+import com.example.ptuxiakh.model.PlacePackage.Location;
+import com.example.ptuxiakh.model.PlacePackage.Place;
 import com.example.ptuxiakh.model.SearchResult;
 import com.example.ptuxiakh.model.SolidSearch.AdvancedSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearch;
@@ -7,6 +10,7 @@ import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.repository.*;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -125,16 +129,17 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Object advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest) throws Exception {
-        User user = getUser(userId);
-        if (advancedSearchRequest == null)
-            throw new NullPointerException("quickSearch null");
-        AdvancedSearch advancedSearch = new AdvancedSearch(advancedSearchRequest);
-        advancedSearch.setUser(user);
-        Object response = advancedSearch.recommend(pythonBaseUrl);
-        if (response == null)
-            throw new Exception("something went wroong on python");
-        return response;
+    public String advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest, String searchId) throws Exception {
+        System.out.println("userId: "+userId);
+        System.out.println("advancedSearchRequest: "+advancedSearchRequest);
+        //filter Data
+        ArrayList<SearchResult> results = new ArrayList<>();
+        QuickSearchHistoryV2 quickSearchHistoryV2 = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(()-> new RuntimeException("error"));
+        QuickSearchResponse quickSearchResponse = quickSearchHistoryV2.getQuickSearchResponse();
+        results = filterPlaces(quickSearchResponse, advancedSearchRequest);
+        quickSearchResponse.setResult(results);
+        String searchIdResult = quickSearchHistoryRepositoryV2.save(quickSearchHistoryV2).getId();
+        return searchIdResult;
     }
 
     /**
@@ -148,5 +153,121 @@ public class SearchServiceImpl implements SearchService {
         if (userId == null)
             throw new NullPointerException("userId is null");
         return userRepository.findById(userId).orElseThrow( () -> new NullPointerException("cant find user"));
+    }
+
+    private ArrayList<SearchResult> filterPlaces(QuickSearchResponse quickSearchResponse, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest){
+        ArrayList<SearchResult> results = new ArrayList<>();
+        for (SearchResult searchResult: quickSearchResponse.getResult()){
+            if (checkPlace(advancedSearchRequest, searchResult.getPlace())){
+                System.out.println("searchResult that is good: ");
+                System.out.println(searchResult);
+                results.add(searchResult);
+            }
+        }
+        return results;
+    }
+
+    private boolean checkPlace(com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest, Place place){
+        if (advancedSearchRequest == null ) return true;
+
+        if (validCategory(advancedSearchRequest.getCategory(), place)){
+            if (validRating(advancedSearchRequest.getRating(), place)){
+                if (validPrice(advancedSearchRequest.getPrice(), place)){
+                    if (validRadius(advancedSearchRequest.getRadius(), advancedSearchRequest.getCenter(), place)) //this will be the radius function
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Boolean validCategory(String category, Place place){
+        if (category == null) return true;
+        if (category.equalsIgnoreCase("all")) return true;
+
+        if (category.equalsIgnoreCase("drink")){
+            if (place.getTypes().contains("night_club")){
+                return true;
+            }
+            if (place.getTypes().contains("bar")){
+                return true;
+            }
+            if (place.getTypes().contains("restaurant")){
+                return true;
+            }
+        }else if (category.equalsIgnoreCase("food")){
+            if (place.getTypes().contains("food")){
+                return true;
+            }
+            if (place.getTypes().contains("restaurant")){
+                return true;
+            }
+        }else if (category.equalsIgnoreCase("coffee")){
+            if (place.getTypes().contains("food")){
+                return true;
+            }
+            if (place.getTypes().contains("cafe")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean validRating(int rating, Place place){
+        if (rating == 0 || place.getRating() == null) return true;
+        if (rating <= place.getRating()){
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean validPrice(int price, Place place){
+        if (price == 0 || place.getPriceLevel() == 0) return true;
+        if (price >= place.getPriceLevel()){
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean validRadius(int radius, Location center, Place place){
+        Double distance = distance(
+                center.getLat(),
+                center.getLng(),
+                place.getGeometry().getLocation().getLat(),
+                place.getGeometry().getLocation().getLng(),
+                'K'
+        );
+        if( radius+5 >= distance ) {
+            return true;
+        }
+        return false;
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') {
+            dist = dist * 1.609344;
+        } else if (unit == 'N') {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts decimal degrees to radians             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts radians to decimal degrees             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 }

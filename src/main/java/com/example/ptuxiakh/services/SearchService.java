@@ -14,5 +14,5 @@ public interface SearchService {
 
     QuickSearchHistoryV2 findQuickSearchById(String searchId);
 
-    Object advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch) throws Exception;
+    String advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch, String searchId) throws Exception;
 }

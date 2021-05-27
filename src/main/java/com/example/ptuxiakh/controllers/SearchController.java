@@ -48,6 +48,42 @@ public class SearchController {
         }
     }
 
+    //advanced model:
+    /*
+    int rating
+    int radius
+    Object center{
+        Double latitude
+        Double longtitude
+    }
+    String category
+    int price
+     */
+    /**
+     * the new advanced search route
+     * @param request
+     * @param advancedSearch
+     * @return
+     */
+    @PostMapping("/advanced")
+    public  ResponseEntity advancedSearch(HttpServletRequest request, @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch){
+        logger.debug("In action: advancedSearch "+advancedSearch.toString());
+        try{
+            if (advancedSearch == null)
+                return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
+            String token = request.getHeader("Authorization").substring(7);
+            String userId = tokenProvider.extractUserIdFromJwt(token);
+            QuickSearchResponse response = searchService.quickSearch(userId);
+            String searchId = searchService.saveSearch(userId, response);
+            String searchIdResult = searchService.advancedSearch(userId, advancedSearch, searchId);
+            return new ResponseEntity<>(new QuickSearchResult(searchIdResult), HttpStatus.OK);
+
+        }catch (Exception exc){
+            exc.printStackTrace();
+            return new ResponseEntity(new Error(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/quick/user")
     public ResponseEntity getLatestQuickSearches(HttpServletRequest request){
         logger.debug("In action: quickSearch");
@@ -76,36 +112,6 @@ public class SearchController {
         }
     }
 
-    //advanced model:
-    /*
-    int rating
-    int radius
-    Object center{
-        Double latitude
-        Double longtitude
-    }
-    String category
-    int price
-     */
-    /**
-     * the new advanced search route
-     * @param request
-     * @param advancedSearch
-     * @return
-     */
-    @PostMapping("/advanced")
-    public  ResponseEntity advancedSearch(HttpServletRequest request, @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch){
-        logger.debug("In action: advancedSearch "+advancedSearch.toString());
-        try{
-            if (advancedSearch == null)
-                return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
-            String token = request.getHeader("Authorization").substring(7);
-            String userId = tokenProvider.extractUserIdFromJwt(token);
 
-            return ResponseEntity.ok( searchService.advancedSearch(userId, advancedSearch));
-        }catch (Exception exc){
-            return new ResponseEntity(new Error(exc.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
 }
