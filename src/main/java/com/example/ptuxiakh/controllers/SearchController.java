@@ -26,12 +26,12 @@ public class SearchController {
     JwtTokenProvider tokenProvider;
 
     @PostMapping("/quick")
-    public ResponseEntity quickSearch(HttpServletRequest request) {
+    public ResponseEntity quickSearch(HttpServletRequest request, @RequestBody String content) {
         logger.debug("In action: quickSearch");
         try {
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            QuickSearchResponse response = searchService.quickSearch(userId);
+            QuickSearchResponse response = searchService.quickSearch(userId, content);
             return new ResponseEntity<>(
                     new QuickSearchResult(
                             searchService.saveSearch(userId, response)
@@ -67,14 +67,17 @@ public class SearchController {
      * @return
      */
     @PostMapping("/advanced")
-    public ResponseEntity advancedSearch(HttpServletRequest request, @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch) {
+    public ResponseEntity advancedSearch(
+            HttpServletRequest request,
+            @RequestBody com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearch,
+            @RequestBody String content) {
         logger.debug("In action: advancedSearch " + advancedSearch.toString());
         try {
             if (advancedSearch == null)
                 return new ResponseEntity(new Error("no search provided"), HttpStatus.BAD_REQUEST);
             String token = request.getHeader("Authorization").substring(7);
             String userId = tokenProvider.extractUserIdFromJwt(token);
-            QuickSearchResponse response = searchService.quickSearch(userId);
+            QuickSearchResponse response = searchService.quickSearch(userId, content);
             String searchId = searchService.saveSearch(userId, response);
             String searchIdResult = searchService.advancedSearch(userId, advancedSearch, searchId);
             return new ResponseEntity<>(new QuickSearchResult(searchIdResult), HttpStatus.OK);
@@ -100,7 +103,7 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity getSearch(HttpServletRequest request, @RequestParam String recId) {
         logger.debug("In action: quickSearch");
         try {

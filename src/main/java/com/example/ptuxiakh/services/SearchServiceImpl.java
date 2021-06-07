@@ -1,16 +1,13 @@
 package com.example.ptuxiakh.services;
 
-import com.example.ptuxiakh.model.AdvancedSearchRequest;
 import com.example.ptuxiakh.model.PlacePackage.Location;
 import com.example.ptuxiakh.model.PlacePackage.Place;
 import com.example.ptuxiakh.model.SearchResult;
-import com.example.ptuxiakh.model.SolidSearch.AdvancedSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.repository.*;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -51,7 +48,7 @@ public class SearchServiceImpl implements SearchService {
      * @return
      */
     @Override
-    public QuickSearchResponse quickSearch(String userId) throws Exception {
+    public QuickSearchResponse quickSearch(String userId, String content) throws Exception {
         User user = getUser(userId);
         QuickSearch quickSearch = new QuickSearch(user);
         QuickSearchResponse response = quickSearch.recommend(pythonLocalUrl);
@@ -66,9 +63,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
         QuickSearchHistoryV2 search = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
-        //for (SearchResult searchResult :search.getQuickSearchResponse().getResult()){
-        //    searchResult.setPlace(placeRepositoryV2.findById(searchResult.getPlaceId()).orElseThrow(() -> new RuntimeException("can't find place")));
-        //}
         return search;
     }
 
@@ -130,8 +124,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public String advancedSearch(String userId, com.example.ptuxiakh.model.SolidSearch.AdvancedSearchRequest advancedSearchRequest, String searchId) throws Exception {
-        System.out.println("userId: "+userId);
-        System.out.println("advancedSearchRequest: "+advancedSearchRequest);
         //filter Data
         ArrayList<SearchResult> results = new ArrayList<>();
         QuickSearchHistoryV2 quickSearchHistoryV2 = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(()-> new RuntimeException("error"));
@@ -159,8 +151,6 @@ public class SearchServiceImpl implements SearchService {
         ArrayList<SearchResult> results = new ArrayList<>();
         for (SearchResult searchResult: quickSearchResponse.getResult()){
             if (checkPlace(advancedSearchRequest, searchResult.getPlace())){
-                System.out.println("searchResult that is good: ");
-                System.out.println(searchResult);
                 results.add(searchResult);
             }
         }

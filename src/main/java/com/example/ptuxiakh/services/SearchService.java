@@ -6,7 +6,7 @@ import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import java.util.List;
 
 public interface SearchService {
-    QuickSearchResponse quickSearch(String userId) throws Exception;
+    QuickSearchResponse quickSearch(String userId, String content) throws Exception;
 
     String saveSearch(String userId, QuickSearchResponse quickSearchResponse);
 
