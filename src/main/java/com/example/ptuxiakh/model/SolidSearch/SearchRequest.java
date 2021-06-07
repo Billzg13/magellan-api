@@ -10,9 +10,12 @@ public abstract class SearchRequest {
 
     User user;
 
-    public SearchRequest(int id, User user) {
+    String type;
+
+    public SearchRequest(int id, User user, String type) {
         this.id = id;
         this.user = user;
+        this.type = type;
     }
 
     public SearchRequest() {
@@ -32,5 +35,13 @@ public abstract class SearchRequest {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

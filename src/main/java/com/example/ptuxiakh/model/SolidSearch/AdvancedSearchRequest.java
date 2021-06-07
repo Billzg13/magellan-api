@@ -8,6 +8,7 @@ public class AdvancedSearchRequest {
     int price;
     int rating;
     Location center;
+    String type;
 
     public AdvancedSearchRequest(int radius, String category, int price, int rating, Location center) {
         this.radius = radius;
@@ -58,6 +59,14 @@ public class AdvancedSearchRequest {
 
     public void setCenter(Location center) {
         this.center = center;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

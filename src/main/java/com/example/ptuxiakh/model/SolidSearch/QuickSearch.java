@@ -10,8 +10,10 @@ import org.springframework.web.client.RestTemplate;
 //quickSearch is exactly the same as a search request what should we do with it?
 public class QuickSearch extends SearchRequest implements SimpleRecommender {
 
-    public QuickSearch(User user) {
+    public QuickSearch(User user, String type) {
         this.user = user;
+        this.type = type;
+
     }
 
     @Override
@@ -23,7 +25,6 @@ public class QuickSearch extends SearchRequest implements SimpleRecommender {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
             HttpEntity<QuickSearch> entity = new HttpEntity<>(this, headers);
 
             ResponseEntity<QuickSearchResponse> responseEntity = restTemplate.postForEntity(

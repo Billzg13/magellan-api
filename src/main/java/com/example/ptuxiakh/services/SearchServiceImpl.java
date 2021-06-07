@@ -3,6 +3,7 @@ package com.example.ptuxiakh.services;
 import com.example.ptuxiakh.model.PlacePackage.Location;
 import com.example.ptuxiakh.model.PlacePackage.Place;
 import com.example.ptuxiakh.model.SearchResult;
+import com.example.ptuxiakh.model.SearchType;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearch;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -48,9 +50,11 @@ public class SearchServiceImpl implements SearchService {
      * @return
      */
     @Override
-    public QuickSearchResponse quickSearch(String userId, String content) throws Exception {
+    public QuickSearchResponse quickSearch(String userId, SearchType type) throws Exception {
         User user = getUser(userId);
-        QuickSearch quickSearch = new QuickSearch(user);
+        QuickSearch quickSearch = new QuickSearch(user, type.getType());
+        System.out.println("in quickSearch");
+        System.out.println(type);
         QuickSearchResponse response = quickSearch.recommend(pythonLocalUrl);
         if (response ==  null){
             System.out.println(response);
@@ -63,11 +67,17 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public QuickSearchHistoryV2 findQuickSearchById(String searchId) {
         QuickSearchHistoryV2 search = quickSearchHistoryRepositoryV2.findById(searchId).orElseThrow(() -> new RuntimeException("cant find"));
+        List<SearchResult> sortedResults = search.getQuickSearchResponse().getResult()
+                .stream().sorted(Comparator.comparingDouble(SearchResult::getCorrelation).reversed())
+                    .collect(Collectors.toList());
+        ArrayList<SearchResult> temp = new ArrayList<>();
+        temp.addAll(sortedResults);
+        search.setQuickSearchResponse(new QuickSearchResponse(temp));
         return search;
     }
 
     @Override
-    public String saveSearch(String userId, QuickSearchResponse quickSearchResponse) {
+    public String saveSearch(String userId, QuickSearchResponse quickSearchResponse, String type) {
         System.out.println("In saveSearch");
         //so we basically wanna save the search response but we only have up to 5 responses per user
         Map<Long, Double> summarys = new HashMap<>();
@@ -97,12 +107,18 @@ public class SearchServiceImpl implements SearchService {
             if (searchResult.getPlaceId() == 9999 ){
                 searchResult.setPlace(placeRepositoryV2.findByName(searchResult.getName()));
                 searchResult.setPlaceId(searchResult.getPlace().getId());
+            }else{
+                searchResult.setPlace(placeRepositoryV2.findById(
+                        searchResult.getPlaceId()).orElseThrow(() -> new RuntimeException("can't find place"))
+                );
             }
         }
-        for (SearchResult searchResult : quickSearchResponse.getResult()){
-            searchResult.setCorrelation(
-                    summarys.get(searchResult.getCorrelationWith())/counts.get(searchResult.getCorrelationWith())
-            );
+        if (type == "collaborative"){
+            for (SearchResult searchResult : quickSearchResponse.getResult()){
+                searchResult.setCorrelation(
+                        summarys.get(searchResult.getCorrelationWith())/counts.get(searchResult.getCorrelationWith())
+                );
+            }
         }
         QuickSearchHistoryV2 quickSearchHistoryV2 =
                 new QuickSearchHistoryV2(userId, quickSearchResponse, new Date());

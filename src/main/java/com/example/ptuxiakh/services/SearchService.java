@@ -1,14 +1,15 @@
 package com.example.ptuxiakh.services;
 
+import com.example.ptuxiakh.model.SearchType;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 
 import java.util.List;
 
 public interface SearchService {
-    QuickSearchResponse quickSearch(String userId, String content) throws Exception;
+    QuickSearchResponse quickSearch(String userId, SearchType type) throws Exception;
 
-    String saveSearch(String userId, QuickSearchResponse quickSearchResponse);
+    String saveSearch(String userId, QuickSearchResponse quickSearchResponse, String type);
 
     List<QuickSearchHistoryV2> getLatestQuickSearches(String userId);
 
