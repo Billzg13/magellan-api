@@ -8,6 +8,9 @@ public class SearchType {
         this.type = type;
     }
 
+    public SearchType() {
+    }
+
     public String getType() {
         return type;
     }

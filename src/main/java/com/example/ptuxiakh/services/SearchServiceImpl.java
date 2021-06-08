@@ -9,6 +9,7 @@ import com.example.ptuxiakh.model.SolidSearch.QuickSearchHistoryV2;
 import com.example.ptuxiakh.model.SolidSearch.QuickSearchResponse;
 import com.example.ptuxiakh.model.auth.User;
 import com.example.ptuxiakh.repository.*;
+import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -71,8 +72,16 @@ public class SearchServiceImpl implements SearchService {
                 .stream().sorted(Comparator.comparingDouble(SearchResult::getCorrelation).reversed())
                     .collect(Collectors.toList());
         ArrayList<SearchResult> temp = new ArrayList<>();
-        temp.addAll(sortedResults);
-        search.setQuickSearchResponse(new QuickSearchResponse(temp));
+        QuickSearchResponse quickSearchResponse = new QuickSearchResponse();
+        if (sortedResults.size() > 30 ){
+            temp.addAll(sortedResults.subList(0, 29));
+            quickSearchResponse = new QuickSearchResponse(temp);
+        }else{
+            temp.addAll(sortedResults);
+            quickSearchResponse = new QuickSearchResponse(temp);
+        }
+        quickSearchResponse.setCount(temp.size());
+        search.setQuickSearchResponse(quickSearchResponse);
         return search;
     }
 

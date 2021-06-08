@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class QuickSearchResponse {
     ArrayList<SearchResult> result = new ArrayList<>();
 
+    int count;
+
     public QuickSearchResponse(ArrayList<SearchResult> result) {
         this.result = result;
     }
@@ -20,6 +22,14 @@ public class QuickSearchResponse {
 
     public void setResult(ArrayList<SearchResult> result) {
         this.result = result;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
