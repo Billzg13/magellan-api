@@ -252,7 +252,7 @@ public class SearchServiceImpl implements SearchService {
                 place.getGeometry().getLocation().getLng(),
                 'K'
         );
-        if( radius+5 >= distance ) {
+        if( radius >= distance ) {
             return true;
         }
         return false;
