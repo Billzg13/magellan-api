@@ -56,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
         QuickSearch quickSearch = new QuickSearch(user, type.getType());
         System.out.println("in quickSearch");
         System.out.println(type);
-        QuickSearchResponse response = quickSearch.recommend(pythonBaseUrl);
+        QuickSearchResponse response = quickSearch.recommend(pythonLocalUrl);
         if (response ==  null){
             System.out.println(response);
             //if response is null something went wrong that we dont know off
